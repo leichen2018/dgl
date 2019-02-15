@@ -18,7 +18,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
 
-from dgl.data import SBMMixture, SBM
+from dgl.data import SBMMixture
+import sbm
 import gnn
 
 parser = argparse.ArgumentParser()
@@ -44,7 +45,7 @@ K = args.n_communities
 p = args.p
 q = args.q
 
-training_dataset = SBM(args.n_graphs, args.n_nodes, K, p, q)
+training_dataset = sbm.SBM(args.n_graphs, args.n_nodes, K, p, q)
 ##training_dataset = SBMMixture(args.n_graphs, args.n_nodes, K)
 print(training_dataset[0])
 training_loader = DataLoader(training_dataset, args.batch_size,

@@ -6,7 +6,7 @@ from .citation_graph import CoraBinary
 from .minigc import *
 from .tree import *
 from .utils import *
-from .sbm import SBMMixture, SBM
+from .sbm import SBMMixture
 from .reddit import RedditDataset
 
 def register_data_args(parser):

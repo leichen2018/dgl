@@ -53,55 +53,6 @@ def sbm(n_blocks, block_size, p, q, rng=None):
     adj = sp.sparse.triu(a) + sp.sparse.triu(a, 1).transpose()
     return adj
 
-class SBM:
-    """ Symmetric Stochastic Block Model
-
-    Parameters
-    ----------
-    n_graphs : int
-        Number of graphs.
-    n_nodes : int
-        Number of nodes.
-    n_communities : int
-        Number of communities.
-    p : float
-        Probability for intra-community edge.
-    q : float
-        Probability for inter-community edge.
-    rng : numpy.random.RandomState, optional
-        Random number generator.
-    """
-    def __init__(self, n_graphs, n_nodes, n_communities, p, q, rng=None):
-        self._n_nodes = n_nodes
-        assert n_nodes % n_communities == 0
-        block_size = n_nodes // n_communities
-        self._gs = [DGLGraph() for i in range(n_graphs)]
-        adjs = [sbm(n_communities, block_size, p, q) for i in range(n_graphs)]
-        for g, adj in zip(self._gs, adjs):
-            g.from_scipy_sparse_matrix(adj)
-        self._lgs = [g.line_graph(backtracking=False) for g in self._gs]
-        in_degrees = lambda g: g.in_degrees(
-                Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()
-        self._g_degs = [in_degrees(g) for g in self._gs]
-        self._lg_degs = [in_degrees(lg) for lg in self._lgs]
-        self._pm_pds = list(zip(*[g.edges() for g in self._gs]))[0]
-
-    def __len__(self):
-        return len(self._gs)
-
-    def __getitem__(self, idx):
-        return self._gs[idx], self._lgs[idx], \
-                self._g_degs[idx], self._lg_degs[idx], self._pm_pds[idx]
-
-    def collate_fn(self, x):
-        g, lg, deg_g, deg_lg, pm_pd = zip(*x)
-        g_batch = batch(g)
-        lg_batch = batch(lg)
-        degg_batch = np.concatenate(deg_g, axis=0)
-        deglg_batch = np.concatenate(deg_lg, axis=0)
-        pm_pd_batch = np.concatenate([x + i * self._n_nodes for i, x in enumerate(pm_pd)], axis=0)
-        return g_batch, lg_batch, degg_batch, deglg_batch, pm_pd_batch
-
 class SBMMixture:
     """ Symmetric Stochastic Block Model Mixture
     Please refer to Appendix C of "Supervised Community Detection with Hierarchical Graph Neural Networks" (https://arxiv.org/abs/1705.08415) for details.
