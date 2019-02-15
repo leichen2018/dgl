@@ -47,7 +47,6 @@ q = args.q
 
 training_dataset = sbm.SBM(args.n_graphs, args.n_nodes, K, p, q)
 ##training_dataset = SBMMixture(args.n_graphs, args.n_nodes, K)
-print(training_dataset[0])
 training_loader = DataLoader(training_dataset, args.batch_size,
                              collate_fn=training_dataset.collate_fn, drop_last=True)
 

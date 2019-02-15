@@ -1,0 +1,4 @@
+/home/lc3909/anaconda3/envs/galaxy1/lib/python3.7/site-packages/dgl/frame.py:204: UserWarning: Initializer is not set. Use zero initializer instead. To suppress this warning, use `set_initializer` to explicitly specify which initializer to use.
+  dgl_warning('Initializer is not set. Use zero initializer instead.'
+train.py:93: UserWarning: torch.nn.utils.clip_grad_norm is now deprecated in favor of torch.nn.utils.clip_grad_norm_.
+  nn.utils.clip_grad_norm(model.parameters(), args.clip_grad_norm)
