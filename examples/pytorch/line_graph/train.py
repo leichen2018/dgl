@@ -13,32 +13,40 @@ from itertools import permutations
 
 import numpy as np
 import torch as th
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader
 
-from dgl.data import SBMMixture
+from dgl.data import SBMMixture, SBM
 import gnn
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch-size', type=int, help='Batch size', default=1)
 parser.add_argument('--gpu', type=int, help='GPU index', default=-1)
-parser.add_argument('--lr', type=float, help='Learning rate', default=0.001)
-parser.add_argument('--n-communities', type=int, help='Number of communities', default=2)
-parser.add_argument('--n-epochs', type=int, help='Number of epochs', default=100)
-parser.add_argument('--n-features', type=int, help='Number of features', default=16)
-parser.add_argument('--n-graphs', type=int, help='Number of graphs', default=10)
+parser.add_argument('--lr', type=float, help='Learning rate', default=0.004)
+parser.add_argument('--n-communities', type=int, help='Number of communities', default=5)
+parser.add_argument('--n-epochs', type=int, help='Number of epochs', default=1)
+parser.add_argument('--n-features', type=int, help='Number of features', default=8)
+parser.add_argument('--n-graphs', type=int, help='Number of graphs', default=6000)
+parser.add_argument('--p', type=float, help='intra-community probability', default=0)
+parser.add_argument('--q', type=float, help='inter-comminity probability', default=18)
 parser.add_argument('--n-layers', type=int, help='Number of layers', default=30)
-parser.add_argument('--n-nodes', type=int, help='Number of nodes', default=10000)
-parser.add_argument('--optim', type=str, help='Optimizer', default='Adam')
-parser.add_argument('--radius', type=int, help='Radius', default=3)
+parser.add_argument('--n-nodes', type=int, help='Number of nodes', default=400)
+parser.add_argument('--optim', type=str, help='Optimizer', default='Adamax')
+parser.add_argument('--radius', type=int, help='Radius', default=2)
+parser.add_argument('--clip_grad_norm', type=float, default=40.0)
 parser.add_argument('--verbose', action='store_true')
 args = parser.parse_args()
 
 dev = th.device('cpu') if args.gpu < 0 else th.device('cuda:%d' % args.gpu)
 K = args.n_communities
+p = args.p
+q = args.q
 
-training_dataset = SBMMixture(args.n_graphs, args.n_nodes, K)
+training_dataset = SBM(args.n_graphs, args.n_nodes, K, p, q)
+##training_dataset = SBMMixture(args.n_graphs, args.n_nodes, K)
+print(training_dataset[0])
 training_loader = DataLoader(training_dataset, args.batch_size,
                              collate_fn=training_dataset.collate_fn, drop_last=True)
 
@@ -81,6 +89,7 @@ def step(i, j, g, lg, deg_g, deg_lg, pm_pd):
     optimizer.zero_grad()
     t0 = time.time()
     loss.backward()
+    nn.utils.clip_grad_norm(model.parameters(), args.clip_grad_norm)
     t_backward = time.time() - t0
     optimizer.step()
 
