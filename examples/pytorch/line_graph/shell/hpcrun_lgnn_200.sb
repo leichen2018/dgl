@@ -2,9 +2,9 @@
 #SBATCH --verbose
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=01:00:00
-#SBATCH --mem=100GB
-#SBATCH --job-name=TRY
+#SBATCH --time=02:00:00
+#SBATCH --mem=16GB
+#SBATCH --job-name=200
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
@@ -17,6 +17,8 @@ module purge
 
 source /home/lc3909/anaconda3/bin/activate galaxy1
 python train.py \
+--n-nodes 200 \
 --gpu 0 \
---n-graphs 100 \
---verbose
+--verbose \
+--save-path models/LGNN_200.pkl \
+

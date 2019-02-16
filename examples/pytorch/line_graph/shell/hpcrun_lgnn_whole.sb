@@ -12,10 +12,10 @@
 #SBATCH --partition=v100_sxm2_4,v100_pci_2,p40_4
 #SBATCH --gres=gpu:1
 
-cd ~/dgl/examples/pytorch/line_graph
+cd /home/lc3909/dgl/examples/pytorch/line_graph
 module purge
 
-source ~/anaconda3/bin/activate galaxy1
+source /home/lc3909/anaconda3/bin/activate galaxy1
 python train.py \
 --gpu 0 \
 --verbose
