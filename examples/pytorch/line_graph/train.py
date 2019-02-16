@@ -145,3 +145,5 @@ for i in range(args.n_epochs):
     overlap_list = test()
     overlap_str = ' - '.join(['%.3f' % overlap for overlap in overlap_list])
     print('[epoch %s%d]overlap: %s' % (epoch, i, overlap_str))
+
+th.save(model.state_dict(), 'model.pkl')
