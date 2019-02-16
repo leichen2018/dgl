@@ -39,7 +39,7 @@ parser.add_argument('--optim', type=str, help='Optimizer', default='Adamax')
 parser.add_argument('--radius', type=int, help='Radius', default=2)
 parser.add_argument('--clip_grad_norm', type=float, default=40.0)
 parser.add_argument('--verbose', action='store_true')
-parser.add_argument('--save-path', type=str, default=model.pkl)
+parser.add_argument('--save-path', type=str, default='model.pkl')
 args = parser.parse_args()
 
 dev = th.device('cpu') if args.gpu < 0 else th.device('cuda:%d' % args.gpu)
@@ -47,10 +47,9 @@ K = args.n_communities
 p = args.p
 q = args.q
 
-training_dataset = sbm.SBM(args.n_graphs, args.n_nodes, K, p, q)
+##training_dataset = sbm.SBM(args.n_graphs, args.n_nodes, K, p, q)
 ##training_dataset = SBMMixture(args.n_graphs, args.n_nodes, K)
-training_loader = DataLoader(training_dataset, args.batch_size,
-                             collate_fn=training_dataset.collate_fn, drop_last=True)
+##training_loader = DataLoader(training_dataset, args.batch_size, collate_fn=training_dataset.collate_fn, drop_last=True)
 
 ones = th.ones(args.n_nodes // K)
 y_list = [th.cat([x * ones for x in p]).long().to(dev) for p in permutations(range(K))]
@@ -122,7 +121,10 @@ def test():
 n_iterations = args.n_graphs // args.batch_size
 for i in range(args.n_epochs):
     total_loss, total_overlap, s_forward, s_backward = 0, 0, 0, 0
-    for j, [g, lg, deg_g, deg_lg, pm_pd] in enumerate(training_loader):
+##    for j, [g, lg, deg_g, deg_lg, pm_pd] in enumerate(training_loader):
+    for j in range(args.n_graphs):
+        g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
+
         loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, pm_pd)
 
         total_loss += loss
