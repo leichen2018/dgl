@@ -90,7 +90,7 @@ def step(i, j, g, lg, deg_g, deg_lg, pm_pd):
     optimizer.zero_grad()
     t0 = time.time()
     loss.backward()
-    nn.utils.clip_grad_norm(model.parameters(), args.clip_grad_norm)
+    nn.utils.clip_grad_norm_(model.parameters(), args.clip_grad_norm)
     t_backward = time.time() - t0
     optimizer.step()
 
@@ -105,6 +105,7 @@ def inference(g, lg, deg_g, deg_lg, pm_pd):
     z = model(g, lg, deg_g, deg_lg, pm_pd)
 
     return z
+    
 def test():
     p_list =[6, 5.5, 5, 4.5, 1.5, 1, 0.5, 0]
     q_list =[0, 0.5, 1, 1.5, 4.5, 5, 5.5, 6]
