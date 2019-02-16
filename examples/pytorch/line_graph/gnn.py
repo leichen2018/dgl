@@ -15,7 +15,7 @@ class GNNModule(nn.Module):
         self.radius = radius
 
         new_linear = lambda: nn.Linear(in_feats, out_feats)
-        new_linear_list = lambda: nn.ModuleList([new_linear() for i in range(radius)])
+        new_linear_list = lambda: nn.ModuleList([new_linear() for i in range(radius + 1)])
 
         self.theta_x, self.theta_deg, self.theta_y = \
             new_linear(), new_linear(), new_linear()
@@ -33,7 +33,7 @@ class GNNModule(nn.Module):
         g.set_n_repr({'z' : z})
         g.update_all(fn.copy_src(src='z', out='m'), fn.sum(msg='m', out='z'))
         z_list.append(g.get_n_repr()['z'])
-        for i in range(self.radius - 1):
+        for i in range(self.radius):
             for j in range(2 ** i):
                 g.update_all(fn.copy_src(src='z', out='m'), fn.sum(msg='m', out='z'))
             z_list.append(g.get_n_repr()['z'])

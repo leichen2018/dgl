@@ -50,7 +50,8 @@ q = args.q
 ones = th.ones(args.n_nodes // K)
 y_list = [th.cat([x * ones for x in p]).long().to(dev) for p in permutations(range(K))]
 
-feats = [1] + [args.n_features] * args.n_layers + [K]
+##feats = [1] + [args.n_features] * args.n_layers + [K]
+feats = [1] + [args.n_features] * args.n_layers
 model = gnn.GNN(feats, args.radius, K).to(dev)
 with th.no_grad():
     model.load_state_dict(th.load(args.model_path))

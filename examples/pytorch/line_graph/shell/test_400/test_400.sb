@@ -19,10 +19,10 @@ source /home/lc3909/anaconda3/bin/activate galaxy1
 
 NODE=400
 
-for f in 1 2 3 4 5 10
+for f in 1
 do
 python test.py \
 --n-nodes  $((${NODE}*$f)) \
 --gpu 0 \
---model-path models/LGNN.pkl
+--model-path models/LGNN_400.pkl
 done

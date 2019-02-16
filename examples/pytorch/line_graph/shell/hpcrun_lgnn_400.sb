@@ -3,8 +3,8 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=04:00:00
-#SBATCH --mem=100GB
-#SBATCH --job-name=WHOLE
+#SBATCH --mem=32GB
+#SBATCH --job-name=400
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
@@ -17,5 +17,7 @@ module purge
 
 source /home/lc3909/anaconda3/bin/activate galaxy1
 python train.py \
+--n-nodes 400 \
 --gpu 0 \
---verbose
+--verbose \
+--save-path models/LGNN_400.pkl
