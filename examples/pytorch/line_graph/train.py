@@ -7,6 +7,7 @@ Author's implementation: https://github.com/joanbruna/GNN_community
 
 from __future__ import division
 import time
+from datetime import datetime as dt
 
 import argparse
 from itertools import permutations
@@ -38,6 +39,7 @@ parser.add_argument('--optim', type=str, help='Optimizer', default='Adamax')
 parser.add_argument('--radius', type=int, help='Radius', default=2)
 parser.add_argument('--clip_grad_norm', type=float, default=40.0)
 parser.add_argument('--verbose', action='store_true')
+parser.add_argument('--save-path', type=str, default=model.pkl)
 args = parser.parse_args()
 
 dev = th.device('cpu') if args.gpu < 0 else th.device('cuda:%d' % args.gpu)
@@ -131,7 +133,7 @@ for i in range(args.n_epochs):
         epoch = '0' * (len(str(args.n_epochs)) - len(str(i)))
         iteration = '0' * (len(str(n_iterations)) - len(str(j)))
         if args.verbose:
-            print('[epoch %s%d iteration %s%d]loss %.3f | overlap %.3f'
+            print(dt.now(), '[epoch %s%d iteration %s%d]loss %.3f | overlap %.3f'
                   % (epoch, i, iteration, j, loss, overlap))
 
     epoch = '0' * (len(str(args.n_epochs)) - len(str(i)))
@@ -146,4 +148,4 @@ for i in range(args.n_epochs):
     overlap_str = ' - '.join(['%.3f' % overlap for overlap in overlap_list])
     print('[epoch %s%d]overlap: %s' % (epoch, i, overlap_str))
 
-th.save(model.state_dict(), 'model.pkl')
+th.save(model.state_dict(), args.save_path)
