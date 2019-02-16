@@ -1,3 +1,0 @@
-/opt/slurm/data/slurmd/job15433284/slurm_script: 行 20: 67772 已杀死               python train.py --gpu 0
-slurmstepd: error: Exceeded step memory limit at some point.
-slurmstepd: error: This may or may not result in some failure. The SLURM utilizes Linux cgroups for resource containment. For reference please read the explanation in the bug report: https://bugs.schedmd.com/show_bug.cgi?id=3214#c4
