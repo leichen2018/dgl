@@ -2,28 +2,24 @@
 #SBATCH --verbose
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=00:30:00
-#SBATCH --mem=16GB
-#SBATCH --job-name=400_test
+#SBATCH --time=04:00:00
+#SBATCH --mem=32GB
+#SBATCH --job-name=400_J0
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
 #SBATCH --error=hpc_outputs/slurm_%j.err 
 #SBATCH --partition=v100_sxm2_4,v100_pci_2,p40_4
 #SBATCH --gres=gpu:1
-#SBATCH --dependency=afterok:15463151
+#SBATCH --dependency=afterok:15463168
 
 cd /home/lc3909/dgl/examples/pytorch/line_graph
 module purge
 
 source /home/lc3909/anaconda3/bin/activate galaxy1
-
-NODE=400
-
-for f in 1
-do
-python test.py \
---n-nodes  $((${NODE}*$f)) \
+python train.py \
+--n-nodes 400 \
 --gpu 0 \
---model-path models/LGNN_400.pkl
-done
+--radius 0 \
+--interval 50 \
+--save-path models/LGNN_400_J0.pkl

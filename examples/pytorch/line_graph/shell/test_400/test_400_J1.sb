@@ -4,14 +4,14 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:30:00
 #SBATCH --mem=16GB
-#SBATCH --job-name=400_test
+#SBATCH --job-name=400J1_test
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
 #SBATCH --error=hpc_outputs/slurm_%j.err 
 #SBATCH --partition=v100_sxm2_4,v100_pci_2,p40_4
 #SBATCH --gres=gpu:1
-#SBATCH --dependency=afterok:15463151
+#SBATCH --dependency=afterok:15463175
 
 cd /home/lc3909/dgl/examples/pytorch/line_graph
 module purge
@@ -25,5 +25,6 @@ do
 python test.py \
 --n-nodes  $((${NODE}*$f)) \
 --gpu 0 \
---model-path models/LGNN_400.pkl
+--radius 1 \
+--model-path models/LGNN_400_J1.pkl
 done

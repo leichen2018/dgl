@@ -22,6 +22,7 @@ from torch.utils.data import DataLoader
 from dgl.data import SBMMixture
 import sbm
 import gnn
+from gnn import aggregate_init
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch-size', type=int, help='Batch size', default=1)
@@ -89,6 +90,8 @@ def test():
 
     for i in range(args.n_graphs):
         g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
+        aggregate_init(g)
+        aggregate_init(lg)
         z = inference(g, lg, deg_g, deg_lg, pm_pd)
         overlap = compute_overlap(th.chunk(z, N, 0))
         ##print('[test %d] overlap %.3f' % (i,  overlap))
