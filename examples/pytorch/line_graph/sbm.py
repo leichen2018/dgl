@@ -44,8 +44,10 @@ class SBM:
         self._lgs = [g.line_graph(backtracking=False) for g in self._gs]
         in_degrees = lambda g: g.in_degrees(
                 Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()
+        out_degrees = lambda g: g.out_degrees(
+                Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()
         self._g_degs = [in_degrees(g) for g in self._gs]
-        self._lg_degs = [in_degrees(lg) for lg in self._lgs]
+        self._lg_degs = [out_degrees(lg) for lg in self._lgs]
         self._pm_pds = list(zip(*[g.edges() for g in self._gs]))[0]
 
     def __len__(self):

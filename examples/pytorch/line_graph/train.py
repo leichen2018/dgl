@@ -21,6 +21,7 @@ from torch.utils.data import DataLoader
 
 from dgl.data import SBMMixture
 import sbm
+from gnn import aggregate_init
 import gnn
 
 parser = argparse.ArgumentParser()
@@ -40,6 +41,7 @@ parser.add_argument('--radius', type=int, help='Radius', default=2)
 parser.add_argument('--clip_grad_norm', type=float, default=40.0)
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--save-path', type=str, default='model.pkl')
+parser.add_argument('--interval', type=int, help='loss intervel', default=50)
 args = parser.parse_args()
 
 dev = th.device('cpu') if args.gpu < 0 else th.device('cuda:%d' % args.gpu)
@@ -56,7 +58,7 @@ y_list = [th.cat([x * ones for x in p]).long().to(dev) for p in permutations(ran
 
 ##feats = [1] + [args.n_features] * args.n_layers + [K]
 feats = [1] + [args.n_features] * args.n_layers
-model = gnn.GNN(feats, args.radius, K).to(dev)
+model = gnn.GNN(feats, args.radius, K, dev).to(dev)
 optimizer = getattr(optim, args.optim)(model.parameters(), lr=args.lr)
 
 def compute_overlap(z_list):
@@ -127,12 +129,27 @@ for i in range(args.n_epochs):
     for j in range(args.n_graphs):
         g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
 
+        aggregate_init(g)
+        aggregate_init(lg)
+
         loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, pm_pd)
 
         total_loss += loss
         total_overlap += overlap
         s_forward += t_forward
         s_backward += t_backward
+
+        if j % args.interval == 0:
+            
+            if j > 0:
+                print('=================== interval %d | loss %0.3f | overlap %.3f ===================' 
+                % (j, interval_loss/args.interval, interval_overlap/args.interval))
+
+            interval_loss = 0
+            interval_overlap = 0
+
+        interval_loss += loss
+        interval_overlap += overlap
 
         epoch = '0' * (len(str(args.n_epochs)) - len(str(i)))
         iteration = '0' * (len(str(n_iterations)) - len(str(j)))
@@ -148,8 +165,8 @@ for i in range(args.n_epochs):
     print('[epoch %s%d]loss %.3f | overlap %.3f | forward time %.3fs | backward time %.3fs'
           % (epoch, i, loss, overlap, t_forward, t_backward))
 
-    overlap_list = test()
-    overlap_str = ' - '.join(['%.3f' % overlap for overlap in overlap_list])
-    print('[epoch %s%d]overlap: %s' % (epoch, i, overlap_str))
+    #overlap_list = test()
+    #overlap_str = ' - '.join(['%.3f' % overlap for overlap in overlap_list])
+    #print('[epoch %s%d]overlap: %s' % (epoch, i, overlap_str))
 
 th.save(model.state_dict(), args.save_path)
