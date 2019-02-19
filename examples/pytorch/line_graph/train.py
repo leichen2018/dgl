@@ -129,10 +129,6 @@ for i in range(args.n_epochs):
     for j in range(args.n_graphs):
         g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
 
-<<<<<<< HEAD
-=======
-        
->>>>>>> 8a2c364fd1f46011d04d5870eb48969e6b5fbce8
         aggregate_init(g)
         aggregate_init(lg)
 

@@ -236,11 +236,7 @@ class GNNModule(nn.Module):
         
         ##print(a)
         
-<<<<<<< HEAD
         sum_x = sum(theta(z.to(self.dev)) for theta, z in zip(self.theta_list, a))
-=======
-        sum_x = sum(theta(z) for theta, z in zip(self.theta_list, a))
->>>>>>> 8a2c364fd1f46011d04d5870eb48969e6b5fbce8
 
         g.set_e_repr({'y' : y})
         g.update_all(fn.copy_edge(edge='y', out='m'), fn.sum('m', 'pmpd_y'))
@@ -276,3 +272,4 @@ class GNN(nn.Module):
         for module in self.module_list:
             x, y = module(g, lg, x, y, deg_g, deg_lg, pm_pd)
         return self.linear(x)
+
