@@ -109,6 +109,25 @@ def aggregate_init(g):
 
     return to_real(t), to_real(tt)
 
+def t_to_feature(g, t, in_feats):
+
+    def nested_mes(nodes):
+        zz_list = []
+        for i in range(nodes.__len__()):
+            ind = t[i]
+
+            if len(ind) == 0 or ind == [0]*ph:
+                ind = [i]
+
+            if in_feats == 1:
+                zz_list.append(th.sum(g.nodes[tuple(ind)].data['z'], dim=0))
+            else:
+                zz_list.append(th.sum(g.nodes[tuple(ind)].data['z'], dim=0).unsqueeze(0))
+
+        return {'zz': th.stack(tuple(zz_list)).squeeze()}
+
+    return nested_mes
+
 class GNNModule(nn.Module):
     def __init__(self, in_feats, out_feats, radius, dev):
         super().__init__()
@@ -132,6 +151,7 @@ class GNNModule(nn.Module):
         self.bn_x = nn.BatchNorm1d(out_feats)
         self.bn_y = nn.BatchNorm1d(out_feats)
     
+    '''
     def t_to_feature(self, g, t):
         #print(g.ndata['z'])
         for i in range(g.number_of_nodes()):
@@ -145,13 +165,11 @@ class GNNModule(nn.Module):
             else:
                 g.nodes[i].data['zz'] = th.sum(g.nodes[tuple(ind)].data['z'], dim=0).unsqueeze(0)
         
-    '''
     def t_to_feature(self, g):
         for i in range(g.number_of_nodes()):
             ind = g.nodes[i].data['t'][0].tolist()
             
             if ind == [0]*ph
-    '''
             
     def tt_to_feature(self, g, tt):
         #print(g.ndata['z'])
@@ -166,6 +184,7 @@ class GNNModule(nn.Module):
             else:
                 g.nodes[i].data['zz'] = th.sum(g.nodes[tuple(ind)].data['z'], dim=0).unsqueeze(0)
             #print('============ t2 =========== %.9fs' % (time.time()-t0))
+    '''
 
     def aggregate(self, g, z, t, tt):
         ###g.register_message_func(id_to_m)
@@ -184,7 +203,8 @@ class GNNModule(nn.Module):
         
         ###g.register_message_func(t_to_m)
         
-        self.t_to_feature(g, t)
+        #self.t_to_feature(g, t)
+        g.apply_nodes(func=t_to_feature(g, t, self.in_feats), v=g.nodes())
         
         if self.in_feats == 1:
             z = g.ndata.pop('zz').reshape(-1,1)
@@ -199,7 +219,8 @@ class GNNModule(nn.Module):
                 g.recv(g.nodes())
                 #g.update_all(fn.copy_src(src='z', out='m'), fn.sum(msg='m', out='z'))
         '''    
-        self.tt_to_feature(g, tt)
+        #self.tt_to_feature(g, tt)
+        g.apply_nodes(func=t_to_feature(g, tt, self.in_feats), v=g.nodes())
             
         if self.in_feats == 1:
             z = g.ndata.pop('zz').reshape(-1,1)
