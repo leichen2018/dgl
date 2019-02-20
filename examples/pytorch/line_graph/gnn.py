@@ -25,78 +25,44 @@ def id_to_m(edges):
     return {'m': edges.src['id']}
 
 def m_to_t(nodes):
-    #print(nodes.__len__())
-    #print(nodes.nodes())
     new_t_list = []
     for i in range(nodes.__len__()):
-        cur = nodes.data['t'][i].tolist()
+        cur = nodes.data['t'][i]
         
-        if not isinstance(cur, list):
-            cur = [cur]
-            
-        new_t = cur[:cur.index(-1)]
+        cur = th.cat((nodes.mailbox['m'][i], cur))
         
-        for m in nodes.mailbox['m'][i]:
-            m = m.tolist()
-            if isinstance(m, list):
-                if -1 in m:
-                    new_t = new_t + m[:m.index(-1)]
-                else:
-                    new_t = new_t + m
-            else:
-                new_t.append(m)
+        cur = th.unique(cur)
         
-        new_t = list(set(new_t))
+        cur = th.cat((cur, (th.ones(ph-list(cur.size())[0], dtype=th.long)*-1).to('cuda:0')))
         
-        if len(new_t) < ph:
-            new_t = new_t + [-1] * (ph-len(new_t))
-        
-        new_t_list.append(new_t)
-        
-    #print(th.tensor(new_t_list))
-    return {'t': th.tensor(new_t_list)}
+        new_t_list.append(cur)
+    
+    return {'t': th.stack(tuple(new_t_list))}
 
 def m_to_tt(nodes):
-    #print(nodes.__len__())
-    #print(nodes.nodes())
     new_t_list = []
     for i in range(nodes.__len__()):
-        cur = nodes.data['t'][i].tolist()
+        cur = nodes.data['tt'][i]
         
-        if not isinstance(cur, list):
-            cur = [cur]
-            
-        new_t = cur[:cur.index(-1)]
+        cur = th.cat((nodes.mailbox['m'][i][0], cur))
         
-        for m in nodes.mailbox['m'][i]:
-            m = m.tolist()
-            if isinstance(m, list):
-                if -1 in m:
-                    new_t = new_t + m[:m.index(-1)]
-                else:
-                    new_t = new_t + m
-            else:
-                new_t.append(m)
+        cur = th.unique(cur)
         
-        new_t = list(set(new_t))
+        cur = th.cat((cur, (th.ones(ph-list(cur.size())[0], dtype=th.long)*-1).to('cuda:0')))
         
-        if len(new_t) < ph:
-            new_t = new_t + [-1] * (ph-len(new_t))
+        new_t_list.append(cur)
         
-        new_t_list.append(new_t)
-        
-    #print(th.tensor(new_t_list))
-    return {'tt': th.tensor(new_t_list)}
+    return {'tt': th.stack(tuple(new_t_list))}
 
 def t_to_m(edges):
     return {'m': edges.src['t']}
 
 def aggregate_init(g):
     for i in range(g.number_of_nodes()):
-        g.nodes[i].data['id'] = th.tensor([i])
+        g.nodes[i].data['id'] = th.tensor([i]).to('cuda:0')
     
-    g.ndata['t'] = th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1
-    g.ndata['tt'] = th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1
+    g.ndata['t'] = (th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1).to('cuda:0')
+    g.ndata['tt'] = (th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1).to('cuda:0')
     
     g.register_message_func(id_to_m)
     g.register_reduce_func(m_to_t)
@@ -136,14 +102,16 @@ class GNNModule(nn.Module):
     def t_to_feature(self, g):
         #print(g.ndata['z'])
         for i in range(g.number_of_nodes()):
-            ind = g.nodes[i].data['t'][0].tolist()
-            
-            if ind == [0] * ph or ind[0] == -1:
-                ind = [i]
+            #print(g.nodes[i].data['t'])
+            ind = g.nodes[i].data['t'][0]
+            ind = th.unique(ind)
+
+            if ind.size()==th.Size([1]) and (th.all(th.eq(ind, th.zeros(1, dtype=th.long).to('cuda:0'))) or th.all(th.eq(ind, th.ones(1, dtype=th.long).to('cuda:0')))):
+                ind = th.tensor(i).to('cuda:0')
             elif -1 in ind:
-                ind = ind[:ind.index(-1)]
-                
-            ind = th.tensor(ind)
+                ind = ind[(ind!=-1).nonzero().squeeze()]
+            
+            #print(ind)
             #print("================  t_to_feature ============")
             #print(g.ndata['z'])
             #print(ind)
@@ -153,20 +121,22 @@ class GNNModule(nn.Module):
             if self.in_feats == 1:
                 g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0)
             else:
-                g.nodes[i].data['zz'] = th.tensor([th.sum(g.nodes[ind].data['z'], dim=0).tolist()])
+                g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0)
         
             
     def tt_to_feature(self, g):
         #print(g.ndata['z'])
         for i in range(g.number_of_nodes()):
-            ind = g.nodes[i].data['tt'][0].tolist()
+            #print(g.nodes[i].data['t'])
+            ind = g.nodes[i].data['tt'][0]
+            ind = th.unique(ind)
             
-            if ind == [0] * ph or ind[0] == -1:
-                ind = [i]
+            if ind.size()==th.Size([1]) and (th.all(th.eq(ind, th.zeros(ph, dtype=th.long).to('cuda:0'))) or th.all(th.eq(ind, th.ones(ph, dtype=th.long).to('cuda:0')))):
+                ind = th.tensor(i).to('cuda:0')
             elif -1 in ind:
-                ind = ind[:ind.index(-1)]
-                
-            ind = th.tensor(ind)
+                ind = ind[(ind!=-1).nonzero().squeeze()]
+            
+            #print(ind)
             #print("================  t_to_feature ============")
             #print(g.ndata['z'])
             #print(ind)
@@ -176,7 +146,7 @@ class GNNModule(nn.Module):
             if self.in_feats == 1:
                 g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0)
             else:
-                g.nodes[i].data['zz'] = th.tensor([th.sum(g.nodes[ind].data['z'], dim=0).tolist()])
+                g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0)
 
     def aggregate(self, g, z):
         ###g.register_message_func(id_to_m)
@@ -197,7 +167,7 @@ class GNNModule(nn.Module):
         self.t_to_feature(g)
         
         if self.in_feats == 1:
-            z = th.tensor([[b] for b in g.ndata.pop('zz').tolist()])
+            z = g.ndata.pop('zz').view(-1,1)
         else:
             z = g.ndata.pop('zz')
         
@@ -212,7 +182,7 @@ class GNNModule(nn.Module):
         self.tt_to_feature(g)
             
         if self.in_feats == 1:
-            z = th.tensor([[b] for b in g.ndata.pop('zz').tolist()])
+            z = g.ndata.pop('zz').view(-1,1)
         else:
             z = g.ndata.pop('zz')
             
@@ -236,7 +206,7 @@ class GNNModule(nn.Module):
         
         ##print(a)
         
-        sum_x = sum(theta(z.to(self.dev)) for theta, z in zip(self.theta_list, a))
+        sum_x = sum(theta(z) for theta, z in zip(self.theta_list, a))
 
         g.set_e_repr({'y' : y})
         g.update_all(fn.copy_edge(edge='y', out='m'), fn.sum('m', 'pmpd_y'))
@@ -247,7 +217,7 @@ class GNNModule(nn.Module):
         x = th.cat([x[:, :n], F.relu(x[:, n:])], 1)
         x = self.bn_x(x)
 
-        sum_y = sum(gamma(z.to(self.dev)) for gamma, z in zip(self.gamma_list, self.aggregate(lg, y)))
+        sum_y = sum(gamma(z) for gamma, z in zip(self.gamma_list, self.aggregate(lg, y)))
 
         y = self.gamma_y(y) + self.gamma_deg(deg_lg * y) + sum_y + self.gamma_x(pmpd_x)
         y = th.cat([y[:, :n], F.relu(y[:, n:])], 1)

@@ -124,13 +124,17 @@ def test():
 
 n_iterations = args.n_graphs // args.batch_size
 for i in range(args.n_epochs):
-    total_loss, total_overlap, s_forward, s_backward = 0, 0, 0, 0
+    total_loss, total_overlap, s_forward, s_backward, s_buildgraph = 0, 0, 0, 0, 0
 ##    for j, [g, lg, deg_g, deg_lg, pm_pd] in enumerate(training_loader):
     for j in range(args.n_graphs):
+	
+        t_bg = time.time()
         g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
 
         aggregate_init(g)
         aggregate_init(lg)
+	
+        s_buildgraph += time.time() - t_bg
 
         loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, pm_pd)
 
@@ -162,8 +166,9 @@ for i in range(args.n_epochs):
     overlap = total_overlap / (j + 1)
     t_forward = s_forward / (j + 1)
     t_backward = s_backward / (j + 1)
-    print('[epoch %s%d]loss %.3f | overlap %.3f | forward time %.3fs | backward time %.3fs'
-          % (epoch, i, loss, overlap, t_forward, t_backward))
+    t_buildgraph = s_buildgraph / (j + 1)
+    print('[epoch %s%d]loss %.3f | overlap %.3f | forward time %.3fs | backward time %.3fs | buildgraph time %.3fs'
+          % (epoch, i, loss, overlap, t_forward, t_backward, t_buildgraph))
 
     #overlap_list = test()
     #overlap_str = ' - '.join(['%.3f' % overlap for overlap in overlap_list])
