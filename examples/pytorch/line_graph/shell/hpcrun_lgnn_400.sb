@@ -2,7 +2,7 @@
 #SBATCH --verbose
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=35:00:00
+#SBATCH --time=5:00:00
 #SBATCH --mem=64GB
 #SBATCH --job-name=400_J2
 #SBATCH --mail-type=BEGIN,END,FAIL
@@ -18,7 +18,8 @@ module purge
 source /home/lc3909/anaconda3/bin/activate galaxy1
 python train.py \
 --n-nodes 400 \
---n-graphs 20 \
+--n-graphs 200 \
 --gpu 0 \
 --interval 50 \
+--verbose \
 --save-path models/LGNN_400.pkl
