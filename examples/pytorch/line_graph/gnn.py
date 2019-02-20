@@ -7,12 +7,25 @@ import torch as th
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+import time
 
 ph = 1000
 
 def pp(l):
     for i in range(len(l)):
         print(l[i])
+
+def real(t):
+    for i in range(list(t.size())[0]):
+        if (t[i]==-1):
+            break
+    return i
+
+def real_list(t):
+    for i in range(len(t)):
+        if t[i] == -1:
+            break
+    return i
 
 def printnode(g):
     for i in range(g.number_of_nodes()):
@@ -31,7 +44,9 @@ def m_to_t(nodes):
         
         cur = th.cat((nodes.mailbox['m'][i], cur))
         
-        cur = th.unique(cur)
+        cur = th.unique(cur, sorted=True)
+
+        cur = cur[1:]
         
         cur = th.cat((cur, (th.ones(ph-list(cur.size())[0], dtype=th.long)*-1).to('cuda:0')))
         
@@ -46,7 +61,9 @@ def m_to_tt(nodes):
         
         cur = th.cat((nodes.mailbox['m'][i][0], cur))
         
-        cur = th.unique(cur)
+        cur = th.unique(cur, sorted=True)
+
+        cur = cur[1:]
         
         cur = th.cat((cur, (th.ones(ph-list(cur.size())[0], dtype=th.long)*-1).to('cuda:0')))
         
@@ -57,12 +74,23 @@ def m_to_tt(nodes):
 def t_to_m(edges):
     return {'m': edges.src['t']}
 
+def to_real(t):
+    r_list = []
+
+    for tt in t:
+        tt = tt[:real_list(tt)]
+        r_list.append(tt)
+
+    return r_list
+
 def aggregate_init(g):
     for i in range(g.number_of_nodes()):
-        g.nodes[i].data['id'] = th.tensor([i]).to('cuda:0')
+        with th.no_grad():
+            g.nodes[i].data['id'] = th.tensor([i]).to('cuda:0')
     
-    g.ndata['t'] = (th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1).to('cuda:0')
-    g.ndata['tt'] = (th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1).to('cuda:0')
+    with th.no_grad():
+        g.ndata['t'] = (th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1).to('cuda:0')
+        g.ndata['tt'] = (th.ones([g.number_of_nodes(), ph], dtype=th.int64) * -1).to('cuda:0')
     
     g.register_message_func(id_to_m)
     g.register_reduce_func(m_to_t)
@@ -75,6 +103,11 @@ def aggregate_init(g):
     
     g.send(g.edges())
     g.recv(g.nodes())
+
+    t = g.ndata['t'].tolist()
+    tt = g.ndata['t'].tolist()
+
+    return to_real(t), to_real(tt)
 
 class GNNModule(nn.Module):
     def __init__(self, in_feats, out_feats, radius, dev):
@@ -99,60 +132,47 @@ class GNNModule(nn.Module):
         self.bn_x = nn.BatchNorm1d(out_feats)
         self.bn_y = nn.BatchNorm1d(out_feats)
     
-    def t_to_feature(self, g):
+    def t_to_feature(self, g, t):
         #print(g.ndata['z'])
         for i in range(g.number_of_nodes()):
-            #print(g.nodes[i].data['t'])
-            ind = g.nodes[i].data['t'][0]
-            ind = th.unique(ind)
-
-            if ind.size()==th.Size([1]) and (th.all(th.eq(ind, th.zeros(1, dtype=th.long).to('cuda:0'))) or th.all(th.eq(ind, th.ones(1, dtype=th.long).to('cuda:0')))):
-                ind = th.tensor(i).to('cuda:0')
-            elif -1 in ind:
-                ind = ind[(ind!=-1).nonzero().squeeze()]
+            ind = t[i]
+           
+            if len(ind)==0 or (len(ind) == 1 and ind[0] == 0):
+                 ind = [i]
             
-            #print(ind)
-            #print("================  t_to_feature ============")
-            #print(g.ndata['z'])
-            #print(ind)
-            #print((g.nodes[ind].data['z']))
-            #print(th.sum(g.nodes[ind].data['z'], dim=0))
-            #print(th.tensor([th.sum(g.nodes[ind].data['z'], dim=0).tolist()]))
             if self.in_feats == 1:
-                g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0)
+                g.nodes[i].data['zz'] = th.sum(g.nodes[tuple(ind)].data['z'], dim=0)
             else:
-                g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0)
+                g.nodes[i].data['zz'] = th.sum(g.nodes[tuple(ind)].data['z'], dim=0).unsqueeze(0)
         
+    '''
+    def t_to_feature(self, g):
+        for i in range(g.number_of_nodes()):
+            ind = g.nodes[i].data['t'][0].tolist()
             
-    def tt_to_feature(self, g):
+            if ind == [0]*ph
+    '''
+            
+    def tt_to_feature(self, g, tt):
         #print(g.ndata['z'])
         for i in range(g.number_of_nodes()):
-            #print(g.nodes[i].data['t'])
-            ind = g.nodes[i].data['tt'][0]
-            ind = th.unique(ind)
+            ind = tt[i]
             
-            if ind.size()==th.Size([1]) and (th.all(th.eq(ind, th.zeros(ph, dtype=th.long).to('cuda:0'))) or th.all(th.eq(ind, th.ones(ph, dtype=th.long).to('cuda:0')))):
-                ind = th.tensor(i).to('cuda:0')
-            elif -1 in ind:
-                ind = ind[(ind!=-1).nonzero().squeeze()]
-            
-            #print(ind)
-            #print("================  t_to_feature ============")
-            #print(g.ndata['z'])
-            #print(ind)
-            #print((g.nodes[ind].data['z']))
-            #print(th.sum(g.nodes[ind].data['z'], dim=0))
-            #print(th.tensor([th.sum(g.nodes[ind].data['z'], dim=0).tolist()]))
-            if self.in_feats == 1:
-                g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0)
-            else:
-                g.nodes[i].data['zz'] = th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0)
+            if len(ind)==0 or (len(ind) == 1 and ind[0] == 0):
+                ind = [i]
 
-    def aggregate(self, g, z):
+            if self.in_feats == 1:
+                g.nodes[i].data['zz'] = th.sum(g.nodes[tuple(ind)].data['z'], dim=0)
+            else:
+                g.nodes[i].data['zz'] = th.sum(g.nodes[tuple(ind)].data['z'], dim=0).unsqueeze(0)
+            #print('============ t2 =========== %.9fs' % (time.time()-t0))
+
+    def aggregate(self, g, z, t, tt):
         ###g.register_message_func(id_to_m)
         
         ###g.register_reduce_func(m_to_t)
         
+ 
         z_list = []
         g.set_n_repr({'z' : z})
         
@@ -164,10 +184,10 @@ class GNNModule(nn.Module):
         
         ###g.register_message_func(t_to_m)
         
-        self.t_to_feature(g)
+        self.t_to_feature(g, t)
         
         if self.in_feats == 1:
-            z = g.ndata.pop('zz').view(-1,1)
+            z = g.ndata.pop('zz').reshape(-1,1)
         else:
             z = g.ndata.pop('zz')
         
@@ -179,10 +199,10 @@ class GNNModule(nn.Module):
                 g.recv(g.nodes())
                 #g.update_all(fn.copy_src(src='z', out='m'), fn.sum(msg='m', out='z'))
         '''    
-        self.tt_to_feature(g)
+        self.tt_to_feature(g, tt)
             
         if self.in_feats == 1:
-            z = g.ndata.pop('zz').view(-1,1)
+            z = g.ndata.pop('zz').reshape(-1,1)
         else:
             z = g.ndata.pop('zz')
             
@@ -197,12 +217,13 @@ class GNNModule(nn.Module):
         #print(z_list)
         return z_list
 
-    def forward(self, g, lg, x, y, deg_g, deg_lg, pm_pd):
+    def forward(self, g, lg, x, y, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt):
         pmpd_x = F.embedding(pm_pd, x)
         
+        t0 = time.time()
         ##print(pmpd_x)
         
-        a = self.aggregate(g,x)
+        a = self.aggregate(g,x, g_t, g_tt)
         
         ##print(a)
         
@@ -217,7 +238,7 @@ class GNNModule(nn.Module):
         x = th.cat([x[:, :n], F.relu(x[:, n:])], 1)
         x = self.bn_x(x)
 
-        sum_y = sum(gamma(z) for gamma, z in zip(self.gamma_list, self.aggregate(lg, y)))
+        sum_y = sum(gamma(z) for gamma, z in zip(self.gamma_list, self.aggregate(lg, y, lg_t, lg_tt)))
 
         y = self.gamma_y(y) + self.gamma_deg(deg_lg * y) + sum_y + self.gamma_x(pmpd_x)
         y = th.cat([y[:, :n], F.relu(y[:, n:])], 1)
@@ -237,9 +258,9 @@ class GNN(nn.Module):
         self.module_list = nn.ModuleList([GNNModule(m, n, radius, dev)
                                           for m, n in zip(feats[:-1], feats[1:])])
 
-    def forward(self, g, lg, deg_g, deg_lg, pm_pd):
+    def forward(self, g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt):
         x, y = deg_g, deg_lg
         for module in self.module_list:
-            x, y = module(g, lg, x, y, deg_g, deg_lg, pm_pd)
+            x, y = module(g, lg, x, y, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt)
         return self.linear(x)
 

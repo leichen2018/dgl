@@ -77,13 +77,13 @@ def from_np(f, *args):
     return wrap
 
 @from_np
-def step(i, j, g, lg, deg_g, deg_lg, pm_pd):
+def step(i, j, g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt):
     """ One step of training. """
     deg_g = deg_g.to(dev)
     deg_lg = deg_lg.to(dev)
     pm_pd = pm_pd.to(dev)
     t0 = time.time()
-    z = model(g, lg, deg_g, deg_lg, pm_pd)
+    z = model(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt)
     t_forward = time.time() - t0
 
     z_list = th.chunk(z, args.batch_size, 0)
@@ -127,16 +127,16 @@ for i in range(args.n_epochs):
     total_loss, total_overlap, s_forward, s_backward, s_buildgraph = 0, 0, 0, 0, 0
 ##    for j, [g, lg, deg_g, deg_lg, pm_pd] in enumerate(training_loader):
     for j in range(args.n_graphs):
-	
-        t_bg = time.time()
-        g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
+        with th.no_grad():	
+            t_bg = time.time()
+            g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
 
-        aggregate_init(g)
-        aggregate_init(lg)
+            g_t, g_tt = aggregate_init(g)
+            lg_t, lg_tt = aggregate_init(lg)
 	
-        s_buildgraph += time.time() - t_bg
+            s_buildgraph += time.time() - t_bg
 
-        loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, pm_pd)
+        loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt)
 
         total_loss += loss
         total_overlap += overlap
