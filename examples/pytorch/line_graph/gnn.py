@@ -119,10 +119,12 @@ def t_to_feature(g, t, in_feats):
                 ind = [i]
 
             if in_feats == 1:
-                zz_list.append(th.sum(g.nodes[ind].data['z'], dim=0))
+                zz_list.append(th.sum(th.index_select(g.ndata['z'], 0, th.LongTensor(ind).to('cuda:0')), dim=0))
             else:
-                zz_list.append(th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0))
-
+                #t0 = time.time()
+                #zz_list.append(th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0))
+                zz_list.append(th.sum(th.index_select(g.ndata['z'], 0, th.LongTensor(ind).to('cuda:0')), dim=0).unsqueeze(0))
+                #print('======== t2 ======= %.9fs' % (time.time()-t0))
         return {'zz': th.stack(tuple(zz_list)).squeeze()}
 
     return nested_mes
@@ -177,10 +179,8 @@ class GNNModule(nn.Module):
     def forward(self, g, lg, x, y, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt):
         pmpd_x = F.embedding(pm_pd, x)
         
-        
         a = self.aggregate(g,x, g_t, g_tt)
-        
-        t0 = time.time()
+ 
         sum_x = sum(theta(z) for theta, z in zip(self.theta_list, a))
 
         g.set_e_repr({'y' : y})
@@ -191,7 +191,7 @@ class GNNModule(nn.Module):
         n = self.out_feats // 2
         x = th.cat([x[:, :n], F.relu(x[:, n:])], 1)
         x = self.bn_x(x)
-
+        
         b = self.aggregate(lg, y, lg_t, lg_tt)
         sum_y = sum(gamma(z) for gamma, z in zip(self.gamma_list, b))
 
