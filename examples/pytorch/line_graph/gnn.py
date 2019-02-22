@@ -11,10 +11,6 @@ import time
 
 ph = 1000
 
-def pp(l):
-    for i in range(len(l)):
-        print(l[i])
-
 def real(t):
     for i in range(list(t.size())[0]):
         if (t[i]==-1):
@@ -26,12 +22,6 @@ def real_list(t):
         if t[i] == -1:
             break
     return i
-
-def printnode(g):
-    for i in range(g.number_of_nodes()):
-        print(g.nodes[i].data['id'])
-        print(g.nodes[i].data['z'])
-        print(g.nodes[i].data['t'])
 
 def id_to_m(edges):
     return {'m': edges.src['id']}
@@ -129,42 +119,6 @@ def aggregate_init(g):
 
     return t, tt, mask_t, mask_tt
 
-def t_to_feature(g, t, in_feats):
-
-    def nested_mes(nodes):
-        mask_list = []
-        t0 = time.time()
-        for i in range(nodes.__len__()):
-            ind = t[i]
-
-            if ind == [0]*len(ind):
-                ind = []
-            
-            with th.no_grad(): 
-                mask_i = th.LongTensor([[0]*len(ind), ind]).to('cuda:0')
-                mask_v = th.ones(len(ind)).to('cuda:0')
-                mask = th.sparse.FloatTensor(mask_i, mask_v, th.Size([1, g.__len__()])).to_dense().to('cuda:0')
-
-            mask_list.append(mask)
-            '''
-            if in_feats == 1:
-                zz_list.append(th.sum(th.index_select(g.ndata['z'], 0, th.LongTensor(ind).to('cuda:0')), dim=0))
-            else:
-                #t0 = time.time()
-                #zz_list.append(th.sum(g.nodes[ind].data['z'], dim=0).unsqueeze(0))
-                zz_list.append(th.sum(th.index_select(g.ndata['z'], 0, th.LongTensor(ind).to('cuda:0')), dim=0).unsqueeze(0))
-                #print('======== t2 ======= %.9fs' % (time.time()-t0))
-            '''
-        print('======== t1 ==========  %.9fs' % (time.time()-t0))
-        t0 = time.time()
-        mask_batch = th.stack(tuple(mask_list)).squeeze()
-        zz = th.mm(mask_batch, g.ndata['z']).squeeze(1)
-        print('======== t2 ==========  %.9fs' % (time.time()-t0))
-        #return {'zz': th.mm(mask_batch, g.ndata['z']).squeeze(1)}
-        return {'zz': zz}
-
-    return nested_mes
-
 class GNNModule(nn.Module):
     def __init__(self, in_feats, out_feats, radius, dev):
         super().__init__()
@@ -187,30 +141,6 @@ class GNNModule(nn.Module):
 
         self.bn_x = nn.BatchNorm1d(out_feats)
         self.bn_y = nn.BatchNorm1d(out_feats)
-    
-
-    def aggregate(self, g, z, t, tt):
-        z_list = []
-        g.set_n_repr({'z' : z})
-        
-        g.apply_nodes(func=t_to_feature(g, t, self.in_feats), v=g.nodes())
-        
-        if self.in_feats == 1:
-            z = g.ndata.pop('zz').reshape(-1,1)
-        else:
-            z = g.ndata.pop('zz')
-        
-        z_list.append(z)
-            
-        g.apply_nodes(func=t_to_feature(g, tt, self.in_feats), v=g.nodes())
-        if self.in_feats == 1:
-            z = g.ndata.pop('zz').reshape(-1,1)
-        else:
-            z = g.ndata.pop('zz')
-            
-        z_list.append(z)
-        
-        return z_list
 
     def forward(self, g, lg, x, y, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt):
         pmpd_x = F.embedding(pm_pd, x)
