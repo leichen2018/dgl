@@ -36,7 +36,7 @@ parser.add_argument('--n-layers', type=int, help='Number of layers', default=30)
 parser.add_argument('--n-nodes', type=int, help='Number of nodes', default=400)
 parser.add_argument('--radius', type=int, help='Radius', default=2)
 parser.add_argument('--verbose', action='store_true')
-parser.add_argument('--model-path', type=str, default='model.pkl')
+parser.add_argument('--model-path', type=str, default='model')
 args = parser.parse_args()
 
 dev = th.device('cpu') if args.gpu < 0 else th.device('cuda:%d' % args.gpu)
@@ -53,9 +53,10 @@ y_list = [th.cat([x * ones for x in p]).long().to(dev) for p in permutations(ran
 
 ##feats = [1] + [args.n_features] * args.n_layers + [K]
 feats = [1] + [args.n_features] * args.n_layers
-model = gnn.GNN(feats, args.radius, K).to(dev)
+model = gnn.GNN(feats, args.radius, K, dev).to(dev)
 with th.no_grad():
-    model.load_state_dict(th.load(args.model_path))
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+    model.load_state_dict(checkpoint['model_state_dict'])
 #model.eval()
 
 def compute_overlap(z_list):
@@ -74,12 +75,12 @@ def from_np(f, *args):
     return wrap
 
 @from_np
-def inference(g, lg, deg_g, deg_lg, pm_pd):
+def inference(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt):
     deg_g = deg_g.to(dev)
     deg_lg = deg_lg.to(dev)
     pm_pd = pm_pd.to(dev)
 
-    z = model(g, lg, deg_g, deg_lg, pm_pd)
+    z = model(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
 
     return z
 
@@ -90,9 +91,9 @@ def test():
 
     for i in range(args.n_graphs):
         g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
-        aggregate_init(g)
-        aggregate_init(lg)
-        z = inference(g, lg, deg_g, deg_lg, pm_pd)
+        g_t, g_tt, mask_g_t, mask_g_tt = aggregate_init(g)
+        lg_t, lg_tt, mask_lg_t, mask_lg_tt = aggregate_init(lg)
+        z = inference(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
         overlap = compute_overlap(th.chunk(z, N, 0))
         ##print('[test %d] overlap %.3f' % (i,  overlap))
         overlap_list.append(overlap)

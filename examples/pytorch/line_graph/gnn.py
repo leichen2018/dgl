@@ -90,6 +90,16 @@ def mask_init(g,t):
 
     return mask_batch
 
+@th.no_grad()
+def pm_pd(g):
+    pmpd_src_i = th.stack((g.all_edges()[0], th.arange(g.number_of_edges())))
+    pmpd_end_i = th.stack((g.all_edges()[1], th.arange(g.number_of_edges())))
+
+    pm = th.sparse.FloatTensor(th.cat((pmpd_src_i, pmpd_end_i), 1), th.ones(2 * g.number_of_edges())).to_dense().to('cuda:0')
+    pd = th.sparse.FloatTensor(th.cat((pmpd_src_i, pmpd_end_i), 1), th.cat((th.ones(g.number_of_edges()), th.ones(g.number_of_edges()) * -1), 0)).to_dense().to('cuda:0')
+
+    return pm, pd
+
 def aggregate_init(g):
     for i in range(g.number_of_nodes()):
         with th.no_grad():
@@ -131,20 +141,24 @@ class GNNModule(nn.Module):
         new_linear = lambda: nn.Linear(in_feats, out_feats)
         new_linear_list = lambda: nn.ModuleList([new_linear() for i in range(radius)])
 
-        self.theta_x, self.theta_deg, self.theta_y = \
-            new_linear(), new_linear(), new_linear()
+        self.theta_x, self.theta_deg, self.theta_y_0, self.theta_y_1 = \
+            new_linear(), new_linear(), new_linear(), new_linear()
         self.theta_list = new_linear_list()
 
-        self.gamma_y, self.gamma_deg, self.gamma_x = \
-            new_linear(), new_linear(), new_linear()
+        self.gamma_y, self.gamma_deg, self.gamma_x_0, self.gamma_x_1 = \
+            new_linear(), new_linear(), new_linear(), new_linear()
         self.gamma_list = new_linear_list()
 
         self.bn_x = nn.BatchNorm1d(out_feats)
         self.bn_y = nn.BatchNorm1d(out_feats)
 
-    def forward(self, g, lg, x, y, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt):
-        pmpd_x = F.embedding(pm_pd, x)
+    def forward(self, g, lg, x, y, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd):
+        pm_x = th.mm(pm.t(), x)
+        pd_x = th.mm(pd.t(), x)
         
+        pm_y = th.mm(pm, y)
+        pd_y = th.mm(pd, y)        
+
         g.set_n_repr({'x': x})
 
         x_list = []
@@ -158,11 +172,7 @@ class GNNModule(nn.Module):
 
         sum_x = sum(theta(z) for theta, z in zip(self.theta_list, x_list))
 
-        g.set_e_repr({'y' : y})
-        g.update_all(fn.copy_edge(edge='y', out='m'), fn.sum('m', 'pmpd_y'))
-        pmpd_y = g.pop_n_repr('pmpd_y')
-
-        x = self.theta_x(x) + self.theta_deg(deg_g * x) + sum_x + self.theta_y(pmpd_y)
+        x = self.theta_x(x) + self.theta_deg(deg_g * x) + sum_x + self.theta_y_0(pm_y) + self.theta_y_1(pd_y)
         n = self.out_feats // 2
         x = th.cat([x[:, :n], F.relu(x[:, n:])], 1)
         x = self.bn_x(x)
@@ -180,7 +190,7 @@ class GNNModule(nn.Module):
         
         sum_y = sum(gamma(z) for gamma, z in zip(self.gamma_list, y_list))
 
-        y = self.gamma_y(y) + self.gamma_deg(deg_lg * y) + sum_y + self.gamma_x(pmpd_x)
+        y = self.gamma_y(y) + self.gamma_deg(deg_lg * y) + sum_y + self.gamma_x_0(pm_x) + self.gamma_x_1(pd_x)
         y = th.cat([y[:, :n], F.relu(y[:, n:])], 1)
         y = self.bn_y(y)
 
@@ -198,9 +208,9 @@ class GNN(nn.Module):
         self.module_list = nn.ModuleList([GNNModule(m, n, radius, dev)
                                           for m, n in zip(feats[:-1], feats[1:])])
 
-    def forward(self, g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt):
+    def forward(self, g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd):
         x, y = deg_g, deg_lg
         for module in self.module_list:
-            x, y = module(g, lg, x, y, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
+            x, y = module(g, lg, x, y, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
         return self.linear(x)
 

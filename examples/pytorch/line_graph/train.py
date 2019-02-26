@@ -21,7 +21,7 @@ from torch.utils.data import DataLoader
 
 from dgl.data import SBMMixture
 import sbm
-from gnn import aggregate_init
+from gnn import aggregate_init, pm_pd
 import gnn
 
 parser = argparse.ArgumentParser()
@@ -40,7 +40,7 @@ parser.add_argument('--optim', type=str, help='Optimizer', default='Adamax')
 parser.add_argument('--radius', type=int, help='Radius', default=2)
 parser.add_argument('--clip_grad_norm', type=float, default=40.0)
 parser.add_argument('--verbose', action='store_true')
-parser.add_argument('--save-path', type=str, default='model.pkl')
+parser.add_argument('--save-path', type=str, default='model')
 parser.add_argument('--interval', type=int, help='loss intervel', default=50)
 args = parser.parse_args()
 
@@ -77,13 +77,12 @@ def from_np(f, *args):
     return wrap
 
 @from_np
-def step(i, j, g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt):
+def step(i, j, g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd):
     """ One step of training. """
     deg_g = deg_g.to(dev)
     deg_lg = deg_lg.to(dev)
-    pm_pd = pm_pd.to(dev)
     t0 = time.time()
-    z = model(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
+    z = model(g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
     t_forward = time.time() - t0
 
     z_list = th.chunk(z, args.batch_size, 0)
@@ -129,14 +128,15 @@ for i in range(args.n_epochs):
     for j in range(args.n_graphs):
         with th.no_grad():	
             t_bg = time.time()
-            g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
+            g, lg, deg_g, deg_lg = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
 
             g_t, g_tt, mask_g_t, mask_g_tt = aggregate_init(g)
+            pm, pd = pm_pd(g)
             lg_t, lg_tt, mask_lg_t, mask_lg_tt = aggregate_init(lg)
 	
             s_buildgraph += time.time() - t_bg
 
-        loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
+        loss, overlap, t_forward, t_backward = step(i, j, g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
 
         total_loss += loss.item()
         total_overlap += overlap
@@ -174,4 +174,7 @@ for i in range(args.n_epochs):
     #overlap_str = ' - '.join(['%.3f' % overlap for overlap in overlap_list])
     #print('[epoch %s%d]overlap: %s' % (epoch, i, overlap_str))
 
-th.save(model.state_dict(), args.save_path)
+th.save({
+         'model_state_dict': model.state_dict(),
+         'optimizer_state_dict': optimizer.state_dict() 
+}, 'checkpoints/' + args.save_path + '.pkl')

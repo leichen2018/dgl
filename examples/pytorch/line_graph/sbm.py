@@ -48,14 +48,13 @@ class SBM:
                 Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()
         self._g_degs = [in_degrees(g) for g in self._gs]
         self._lg_degs = [out_degrees(lg) for lg in self._lgs]
-        self._pm_pds = list(zip(*[g.edges() for g in self._gs]))[0]
 
     def __len__(self):
         return len(self._gs)
 
     def __getitem__(self, idx):
         return self._gs[idx], self._lgs[idx], \
-                self._g_degs[idx], self._lg_degs[idx], self._pm_pds[idx]
+                self._g_degs[idx], self._lg_degs[idx]
 
     def collate_fn(self, x):
         g, lg, deg_g, deg_lg, pm_pd = zip(*x)
@@ -63,5 +62,4 @@ class SBM:
         lg_batch = batch(lg)
         degg_batch = np.concatenate(deg_g, axis=0)
         deglg_batch = np.concatenate(deg_lg, axis=0)
-        pm_pd_batch = np.concatenate([x + i * self._n_nodes for i, x in enumerate(pm_pd)], axis=0)
-        return g_batch, lg_batch, degg_batch, deglg_batch, pm_pd_batch
+        return g_batch, lg_batch, degg_batch, deglg_batch
