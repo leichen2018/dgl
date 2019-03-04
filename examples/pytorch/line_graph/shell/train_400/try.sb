@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=24:00:00
 #SBATCH --mem=64GB
-#SBATCH --job-name=6000_004lr
+#SBATCH --job-name=try
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
@@ -16,10 +16,14 @@ cd /home/lc3909/dgl/examples/pytorch/line_graph
 module purge
 
 source /home/lc3909/anaconda3/bin/activate galaxy1
+
+set -x
+
 python train.py \
 --n-nodes 400 \
 --n-graphs 6000 \
 --gpu 0 \
---interval 100 \
---save-path J2_N400_L30_lr004_6000_1 
+--interval 1 \
+--model 1 \
+--save-path try 
 

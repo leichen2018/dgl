@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 from dgl.data import SBMMixture
 import sbm
 import gnn
-from gnn import aggregate_init
+from gnn import aggregate_init, pm_pd
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch-size', type=int, help='Batch size', default=1)
@@ -75,12 +75,11 @@ def from_np(f, *args):
     return wrap
 
 @from_np
-def inference(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt):
+def inference(g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd):
     deg_g = deg_g.to(dev)
     deg_lg = deg_lg.to(dev)
-    pm_pd = pm_pd.to(dev)
 
-    z = model(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
+    z = model(g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
 
     return z
 
@@ -90,10 +89,11 @@ def test():
     N = 1
 
     for i in range(args.n_graphs):
-        g, lg, deg_g, deg_lg, pm_pd = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
+        g, lg, deg_g, deg_lg = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
         g_t, g_tt, mask_g_t, mask_g_tt = aggregate_init(g)
+        pm, pd = pm_pd(g)
         lg_t, lg_tt, mask_lg_t, mask_lg_tt = aggregate_init(lg)
-        z = inference(g, lg, deg_g, deg_lg, pm_pd, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt)
+        z = inference(g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
         overlap = compute_overlap(th.chunk(z, N, 0))
         ##print('[test %d] overlap %.3f' % (i,  overlap))
         overlap_list.append(overlap)

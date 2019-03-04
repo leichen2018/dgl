@@ -21,8 +21,11 @@ from torch.utils.data import DataLoader
 
 from dgl.data import SBMMixture
 import sbm
-from gnn import aggregate_init, pm_pd
+from gnn_1 import aggregate_init, pm_pd
 import gnn
+import gnn_1
+
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--batch-size', type=int, help='Batch size', default=1)
@@ -42,6 +45,7 @@ parser.add_argument('--clip_grad_norm', type=float, default=40.0)
 parser.add_argument('--verbose', action='store_true')
 parser.add_argument('--save-path', type=str, default='model')
 parser.add_argument('--interval', type=int, help='loss intervel', default=50)
+parser.add_argument('--model', type=int, default=0)
 args = parser.parse_args()
 
 dev = th.device('cpu') if args.gpu < 0 else th.device('cuda:%d' % args.gpu)
@@ -56,9 +60,27 @@ q = args.q
 ones = th.ones(args.n_nodes // K)
 y_list = [th.cat([x * ones for x in p]).long().to(dev) for p in permutations(range(K))]
 
-##feats = [1] + [args.n_features] * args.n_layers + [K]
-feats = [1] + [args.n_features] * args.n_layers
-model = gnn.GNN(feats, args.radius, K, dev).to(dev)
+class Unbuffered(object):
+   def __init__(self, stream):
+       self.stream = stream
+   def write(self, data):
+       self.stream.write(data)
+       self.stream.flush()
+   def writelines(self, datas):
+       self.stream.writelines(datas)
+       self.stream.flush()
+   def __getattr__(self, attr):
+       return getattr(self.stream, attr)
+
+sys.stdout = Unbuffered(sys.stdout)
+
+feats = [1] + [args.n_features] * args.n_layers + [K]
+
+if args.model == 0:
+    model = gnn.GNN(feats, args.radius, K, dev).to(dev)
+else:
+    model = gnn_1.GNN(feats, args.radius, K, dev).to(dev)
+
 optimizer = getattr(optim, args.optim)(model.parameters(), lr=args.lr)
 
 def compute_overlap(z_list):
@@ -83,6 +105,7 @@ def step(i, j, g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt
     deg_lg = deg_lg.to(dev)
     t0 = time.time()
     z = model(g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
+
     t_forward = time.time() - t0
 
     z_list = th.chunk(z, args.batch_size, 0)
@@ -90,6 +113,7 @@ def step(i, j, g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt
     overlap = compute_overlap(z_list)
 
     optimizer.zero_grad()
+    #model.zero_grad()
     t0 = time.time()
     loss.backward()
     nn.utils.clip_grad_norm_(model.parameters(), args.clip_grad_norm)

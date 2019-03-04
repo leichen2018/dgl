@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=55:00:00
 #SBATCH --mem=64GB
-#SBATCH --job-name=15000_004lr
+#SBATCH --job-name=15000_004lr_1
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
@@ -21,5 +21,5 @@ python train.py \
 --n-graphs 15000 \
 --gpu 0 \
 --interval 100 \
---save-path J2_N400_L30_lr004_15000 
+--save-path J2_N400_L30_lr004_15000_1 
 
