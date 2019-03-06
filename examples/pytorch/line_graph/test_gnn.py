@@ -60,11 +60,9 @@ with th.no_grad():
 
 def compute_overlap(z_list):
     ybar_list = [th.max(z, 1)[1] for z in z_list]
-    print(ybar_list)
     overlap_list = []
     for y_bar in ybar_list:
         accuracy = max(th.sum(y_bar == y).item() for y in y_list) / args.n_nodes
-        print(accuracy)
         overlap = (accuracy - 1 / K) / (1 - 1 / K)
         overlap_list.append(overlap)
     return sum(overlap_list) / len(overlap_list)
@@ -90,30 +88,13 @@ def test():
     N = 1
 
     for i in range(args.n_graphs):
-        g, lg, deg_g, deg_lg, g_adj, _ = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
+        g, lg, deg_g, deg_lg = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
         g_t, g_tt, mask_g_t, mask_g_tt = aggregate_init(g)
-        #aa = th.mm(mask_g_t, mask_g_t)
-        #print(th.sum(g_adj.to_dense()-mask_g_t))
-        g_adj_adj = th.mm(g_adj, g_adj.to_dense())
-        g_adj_2 = th.where(g_adj_adj>0, th.ones(g_adj_adj.size()).to('cuda:0'), g_adj_adj)
-        #print(th.sum(g_adj_2-mask_g_tt))
-        print("====== adj ======")
-        print(mask_g_t)
-        print("")
-        print("====== adj x adj ======")
-        print(g_adj_2)
-        print("")
-        print("====== my implementation of A_2_1 ======")
-        print(mask_g_tt)
-        print("")
-        #bb = th.where(aa>0, th.ones(aa.size()).to('cuda:0'), aa)
-        #print(aa)
-        #print(bb)
         pm, pd = pm_pd(g)
         lg_t, lg_tt, mask_lg_t, mask_lg_tt = aggregate_init(lg)
         z = inference(g, lg, deg_g, deg_lg, g_t, g_tt, lg_t, lg_tt, mask_g_t, mask_g_tt, mask_lg_t, mask_lg_tt, pm, pd)
         overlap = compute_overlap(th.chunk(z, N, 0))
-        print('[test %d] overlap %.3f' % (i,  overlap))
+        ##print('[test %d] overlap %.3f' % (i,  overlap))
         overlap_list.append(overlap)
 
     return overlap_list

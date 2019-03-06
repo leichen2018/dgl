@@ -9,6 +9,10 @@ import numpy.random as npr
 import scipy as sp
 import networkx as nx
 
+import torch
+
+from dgl import backend as F
+
 from dgl.batched_graph import batch
 from dgl.graph import DGLGraph
 from dgl.utils import Index
@@ -49,12 +53,15 @@ class SBM:
         self._g_degs = [in_degrees(g) for g in self._gs]
         self._lg_degs = [out_degrees(lg) for lg in self._lgs]
 
+        self._g_adj = [g.adjacency_matrix().to('cuda:0') for g in self._gs]
+        self._lg_adj = [lg.adjacency_matrix().to('cuda:0') for lg in self._lgs]
+
     def __len__(self):
         return len(self._gs)
 
     def __getitem__(self, idx):
         return self._gs[idx], self._lgs[idx], \
-                self._g_degs[idx], self._lg_degs[idx]
+                self._g_degs[idx], self._lg_degs[idx], self._g_adj[idx], self._lg_adj[idx]
 
     def collate_fn(self, x):
         g, lg, deg_g, deg_lg, pm_pd = zip(*x)
