@@ -41,10 +41,12 @@ class SBM:
         self._n_nodes = n_nodes
         assert n_nodes % n_communities == 0
         block_size = n_nodes // n_communities
+        p /= n_nodes
+        q /= n_nodes
         self._gs = [DGLGraph() for i in range(n_graphs)]
-        adjs = [data.sbm.sbm(n_communities, block_size, p, q) for i in range(n_graphs)]
-        for g, adj in zip(self._gs, adjs):
-            g.from_scipy_sparse_matrix(adj)
+        for g in self._gs:
+            g_nx = nx.planted_partition_graph(n_communities, block_size, p, q)
+            g.from_networkx(g_nx)
         self._lgs = [g.line_graph(backtracking=False) for g in self._gs]
         in_degrees = lambda g: g.in_degrees(
                 Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()

@@ -21,7 +21,8 @@ from torch.utils.data import DataLoader
 
 from dgl.data import SBMMixture
 import sbm
-import gnn_2
+import lgnn_rw
+from lgnn_rw import pm_pd
 
 import sys
 
@@ -74,7 +75,7 @@ sys.stdout = Unbuffered(sys.stdout)
 
 feats = [1] + [args.n_features] * args.n_layers + [K]
 
-model = gnn_2.GNN(feats, args.radius, K, dev).to(dev)
+model = lgnn_rw.GNN(feats, args.radius, K, dev).to(dev)
 
 optimizer = getattr(optim, args.optim)(model.parameters(), lr=args.lr)
 
@@ -93,34 +94,16 @@ def from_np(f, *args):
         return f(*new)
     return wrap
 
-@th.no_grad()
-def succ_random(g):
-    succ_list = []
-    
-    for i in range(g.__len__()):
-        if g.successors(i).size()[0] > 0:
-            succ_list.append(g.successors(i)[th.randint(0, g.successors(i).size()[0], (1,))])
-        #    succ_list.append(g.successors(i)[-1])
-    
-    succ = th.cat(tuple(succ_list), dim=0)
-    #succ = th.stack(tuple(succ_list))
-
-    return succ
-
-@th.no_grad()
-def adj2_gen(a1, succ):
-    mask_i = th.sparse.FloatTensor(th.stack((th.arange(succ.size()[0]).to('cuda:0'), succ)), th.ones(succ.size()).to('cuda:0'), \
-        a1.size()).to('cuda:0')
-    adj2 = th.sparse.mm(mask_i, a1)
-    
-    return adj2
-
 @from_np
-def step(i, j, deg_g, g_a1, g_a2):
+def step(i, j, deg_g, deg_lg, g_w_list, lg_w_list, pm, pd):
     """ One step of training. """
     deg_g = deg_g.to(dev)
+    deg_lg = deg_lg.to(dev)
+    pm = pm.to(dev)
+    pd = pd.to(dev)
+
     t0 = time.time()
-    z = model(deg_g, g_a1, g_a2)
+    z = model(deg_g, deg_lg, g_w_list, lg_w_list, pm, pd)
 
     t_forward = time.time() - t0
 
@@ -138,33 +121,61 @@ def step(i, j, deg_g, g_a1, g_a2):
 
     return loss, overlap, t_forward, t_backward
 
+@from_np
+def inference(g, lg, deg_g, deg_lg, pm_pd):
+    deg_g = deg_g.to(dev)
+    deg_lg = deg_lg.to(dev)
+    pm_pd = pm_pd.to(dev)
+
+    z = model(g, lg, deg_g, deg_lg, pm_pd)
+
+    return z
+    
+def test():
+    p_list =[6, 5.5, 5, 4.5, 1.5, 1, 0.5, 0]
+    q_list =[0, 0.5, 1, 1.5, 4.5, 5, 5.5, 6]
+    N = 1
+    overlap_list = []
+    for p, q in zip(p_list, q_list):
+        dataset = SBMMixture(N, args.n_nodes, K, pq=[[p, q]] * N)
+        loader = DataLoader(dataset, N, collate_fn=dataset.collate_fn)
+        g, lg, deg_g, deg_lg, pm_pd = next(iter(loader))
+        z = inference(g, lg, deg_g, deg_lg, pm_pd)
+        overlap_list.append(compute_overlap(th.chunk(z, N, 0)))
+    return overlap_list
+
 n_iterations = args.n_graphs // args.batch_size
+eps = 1e-6
 for i in range(args.n_epochs):
     total_loss, total_overlap, s_forward, s_backward, s_buildgraph = 0, 0, 0, 0, 0
     interval_loss, interval_overlap = 0, 0
 ##    for j, [g, lg, deg_g, deg_lg, pm_pd] in enumerate(training_loader):
     for j in range(args.n_graphs):
         with th.no_grad():	
+            t_bg = time.time()
             g, lg, deg_g, deg_lg, g_adj, lg_adj = sbm.SBM(1, args.n_nodes, K, p, q).__getitem__(0)
 
-            g_a1 = g_adj.to_dense()
-            g_a1_a1 = th.sparse.mm(g_adj, g_adj.to_dense())
-            g_a2 = th.where(g_a1_a1>0, th.ones(g_a1_a1.size()).to('cuda:0'), g_a1_a1)
-            
-            #g_a2_deg = th.diag(1/th.sum(g_a2, 0)).to('cuda:0')
+            g_w_list = []
+            lg_w_list = []
 
-            #g_a2 = th.mm(g_a2_deg, g_a2)
-            
-            #g_a2 = adj2_gen(g_a1, succ_random(g).to('cuda:0'))
-            #g_a2 = th.mm(th.diag(1/th.sum(g_a2, 0)).to('cuda:0'), g_a2)
-            #g_a2 = g_a2 - th.diag(th.sum(g_a2, 0)).to('cuda:0')
+            g_w_p = g_adj.to_dense()
+            lg_w_p = lg_adj.to_dense()
 
-            #if j<1500:
-            #    g_a2 = th.zeros(g_a2.size()).to('cuda:0')
+            for i in range(args.radius):
+                g_w = th.mm(th.diag(1/(th.sum(g_w_p, dim=1) + eps)), g_w_p)
+                lg_w = th.mm(th.diag(1/(th.sum(lg_w_p, dim=1) + eps)), lg_w_p)
 
-            #print(g_a2)
-            
-        loss, overlap, t_forward, t_backward = step(i, j, deg_g, g_a1, g_a2)
+                g_w_list.append(g_w)
+                lg_w_list.append(lg_w)
+
+                g_w_p = th.mm(g_w, g_w.t())
+                lg_w_p = th.mm(lg_w, lg_w.t())
+
+            pm, pd = pm_pd(g)
+	
+            s_buildgraph += time.time() - t_bg
+
+        loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_w_list, lg_w_list, pm, pd)
 
         total_loss += loss.item()
         total_overlap += overlap

@@ -13,8 +13,8 @@ def pm_pd(g):
     pmpd_src_i = th.stack((g.all_edges()[0], th.arange(g.number_of_edges())))
     pmpd_end_i = th.stack((g.all_edges()[1], th.arange(g.number_of_edges())))
     
-    pm = th.sparse.FloatTensor(th.cat((pmpd_src_i, pmpd_end_i), 1), th.ones(2*g.number_of_edges())).to_dense()
-    pd = th.sparse.FloatTensor(th.cat((pmpd_src_i, pmpd_end_i), 1), th.cat((th.ones(g.number_of_edges()), th.ones(g.number_of_edges())*-1), 0)).to_dense()
+    pm = th.sparse.FloatTensor(th.cat((pmpd_src_i, pmpd_end_i), 1), th.ones(2*g.number_of_edges()), th.Size([g.number_of_nodes(),g.number_of_edges()])).to_dense()
+    pd = th.sparse.FloatTensor(th.cat((pmpd_src_i, pmpd_end_i), 1), th.cat((th.ones(g.number_of_edges()), th.ones(g.number_of_edges())*-1), 0), th.Size([g.number_of_nodes(), g.number_of_edges()])).to_dense()
     
     return pm, pd
 
@@ -139,7 +139,8 @@ class GNN(nn.Module):
                                           for m, n in zip(feats[:-2], feats[1:-1])])
 
     def forward(self, deg_g, deg_lg, g_a1, g_a2, lg_a1, lg_a2, pm, pd):
-        x, y = deg_g, deg_lg
+        x, y = th.randn_like(deg_g), th.randn_like(deg_lg)
+        #x, y = deg_g, deg_lg
         
         for module in self.module_list:
             x, y = module(x, y, deg_g, deg_lg, g_a1, g_a2, lg_a1, lg_a2, pm, pd)
