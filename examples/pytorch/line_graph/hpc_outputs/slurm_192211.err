@@ -1,0 +1,2 @@
++ python train_exp_gnn_flow_2.py --n-nodes 400 --n-graphs 60000 --gpu 0 --interval 100 --verbose --save-path flow_r2
+slurmstepd: error: *** JOB 192211 ON lion16 CANCELLED AT 2019-04-13T00:53:40 ***

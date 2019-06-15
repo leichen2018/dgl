@@ -1,0 +1,2 @@
+2019-04-07 21:35:56.319051 [epoch 0 iteration 0]loss 8.780 | overlap 0.069
+[epoch 0]loss 8.780 | overlap 0.069 | forward time 0.153s | backward time 0.281s | buildgraph time 0.187s

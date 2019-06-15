@@ -2,15 +2,14 @@
 #SBATCH --verbose
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=16:00:00
+#SBATCH --time=32:00:00
 #SBATCH --mem=64GB
 #SBATCH --job-name=exp1_800_nq18
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
 #SBATCH --error=hpc_outputs/slurm_%j.err 
-#SBATCH --partition=v100_sxm2_4,v100_pci_2,p40_4
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:1080ti:1
 
 cd /home/lc3909/dgl/examples/pytorch/line_graph
 module purge

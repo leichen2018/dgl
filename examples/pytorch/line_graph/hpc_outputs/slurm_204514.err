@@ -1,0 +1,7 @@
++ python train_exp_lgnn_flow_iter.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path flow_iter
+Traceback (most recent call last):
+  File "train_exp_lgnn_flow_iter.py", line 173, in <module>
+    pm, pd = pm_pd(g)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_flow_iter.py", line 17, in pm_pd
+    deg_end_inverse = th.where(deg_end_inverse>0, 1/deg_end_inverse, th.zeros(deg_end_inverse.size()))
+RuntimeError: expected scalar type Long but found Float

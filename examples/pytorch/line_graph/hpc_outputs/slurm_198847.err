@@ -1,0 +1,1 @@
++ python train_exp_lgnn_iter_r2.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_iter_r2

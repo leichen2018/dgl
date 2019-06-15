@@ -1,0 +1,23 @@
++ python train_lgnn_fflow.py --n-nodes 400 --n-graphs 1 --gpu 0 --verbose
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 186, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, adj_diag_deg_inverse, diag_deg_inverse_adj_deg_inverse, adj_diag_lg_deg_inverse, pm, pd, deg_g, deg_lg)
+  File "train_lgnn_fflow.py", line 101, in wrap
+    return f(*new)
+  File "train_lgnn_fflow.py", line 113, in step
+    z = model(g_a_d, g_d_a_d, lg_a_d, pm, pd, deg_g, deg_lg)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 105, in forward
+    x, y = module(x, y, g_a_d, g_d_a_d, lg_a_d, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 61, in forward
+    y_r = self.gamma_y_r(y) + self.gamma_ad_r(th.mm(lg_a_d, y)) + self.gamma_x_r(pm_x)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 67, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/functional.py", line 1352, in linear
+    ret = torch.addmm(torch.jit._unwrap_optional(bias), input, weight.t())
+RuntimeError: size mismatch, m1: [5706 x 8], m2: [1 x 4] at /pytorch/aten/src/THC/generic/THCTensorMathBlas.cu:266

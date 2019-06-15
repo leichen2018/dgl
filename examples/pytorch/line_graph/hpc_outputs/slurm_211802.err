@@ -1,0 +1,66 @@
++ model_name=lgnn_naive_sharing_30
++ python train_lgnn_naive_sharing.py --n-nodes 400 --n-graphs 15000 --n-layers 30 --gpu 0 --interval 100 --verbose
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 3 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 5 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 10 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 20 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 30 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 60 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 90 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'
++ for layers in 3 5 10 20 30 60 90 120
++ python test_lgnn_naive_sharing.py --gpu 0 --n-nodes 400 --n-layers 120 --n-graphs 300 --model-path lgnn_naive_sharing_30
+Traceback (most recent call last):
+  File "test_lgnn_naive_sharing.py", line 60, in <module>
+    checkpoint = th.load('checkpoints/' + args.model_path + '.pkl')
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/serialization.py", line 366, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/lgnn_naive_sharing_30.pkl'

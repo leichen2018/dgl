@@ -1,0 +1,23 @@
++ python train_exp_lgnn_sim.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_sim
+Traceback (most recent call last):
+  File "train_exp_lgnn_sim.py", line 172, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "train_exp_lgnn_sim.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_sim.py", line 109, in step
+    z = model(deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 139, in forward
+    y = module(y, deg_g, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 48, in forward
+    y_r = self.gamma_a_r(th.mm(lg_a1, y))
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 67, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/functional.py", line 1352, in linear
+    ret = torch.addmm(torch.jit._unwrap_optional(bias), input, weight.t())
+RuntimeError: size mismatch, m1: [5902 x 8], m2: [1 x 4] at /pytorch/aten/src/THC/generic/THCTensorMathBlas.cu:266

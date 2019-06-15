@@ -1,0 +1,9 @@
++ python train_lgnn_fflow.py --n-nodes 10 --n-graphs 1 --gpu 0 --verbose --q 4
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 83, in <module>
+    model = lgnn_fflow.GNN(feats, args.radius, K, dev).to(dev)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 96, in __init__
+    self.module_final = GNNModule_final(feats[-2], feats[-1], radius, dev)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 79, in __init__
+    self.theta_list = new_linear_list()
+NameError: name 'new_linear_list' is not defined

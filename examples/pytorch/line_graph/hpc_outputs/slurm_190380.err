@@ -1,0 +1,13 @@
++ python train_lgnn_fflow.py --n-nodes 400 --n-graphs 1 --gpu 0 --verbose
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 83, in <module>
+    model = lgnn_fflow.GNN(feats, args.radius, K, dev).to(dev)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 98, in __init__
+    for m, n in zip(feats[:-2], feats[1:-1])])
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 98, in <listcomp>
+    for m, n in zip(feats[:-2], feats[1:-1])])
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 37, in __init__
+    new_linear(), new_linear(), new_linear_()
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/lgnn_fflow.py", line 31, in <lambda>
+    new_linear_ = lambda: nn.linear(out_feats, out_feats // 2)
+AttributeError: module 'torch.nn' has no attribute 'linear'

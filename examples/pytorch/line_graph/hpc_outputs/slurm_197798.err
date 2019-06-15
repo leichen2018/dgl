@@ -1,0 +1,5 @@
++ python train_exp_lgnn_flow.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path flow_lgnn
+Traceback (most recent call last):
+  File "train_exp_lgnn_flow.py", line 179, in <module>
+    pm, pd = pm_pd(g)
+NameError: name 'pm_pd' is not defined

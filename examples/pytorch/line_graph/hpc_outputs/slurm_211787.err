@@ -1,0 +1,13 @@
++ python train_exp_lgnn_origin_ws.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --n-features 8 --verbose --save-path lgnn
+Traceback (most recent call last):
+  File "train_exp_lgnn_origin_ws.py", line 172, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "train_exp_lgnn_origin_ws.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_origin_ws.py", line 109, in step
+    z = model(deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_origin_ws.py", line 105, in forward
+    x, y = deg_lg
+ValueError: too many values to unpack (expected 2)

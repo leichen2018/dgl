@@ -1,0 +1,23 @@
++ python train_exp_lgnn_sim.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_sim
+Traceback (most recent call last):
+  File "train_exp_lgnn_sim.py", line 172, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "train_exp_lgnn_sim.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_sim.py", line 109, in step
+    z = model(deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 140, in forward
+    y = module(y, deg_g, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 46, in forward
+    y1 = self.mlp(y)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 62, in forward
+    for layer_linear, layer_bn in zip(self.modules_linear, self.modules_bn):
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 535, in __getattr__
+    type(self).__name__, name))
+AttributeError: 'MLP' object has no attribute 'modules_bn'

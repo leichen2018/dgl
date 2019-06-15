@@ -1,0 +1,23 @@
++ python train_exp_lgnn_sim.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_sim
+Traceback (most recent call last):
+  File "train_exp_lgnn_sim.py", line 172, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "train_exp_lgnn_sim.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_sim.py", line 109, in step
+    z = model(deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 118, in forward
+    y = module(y, deg_g, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 54, in forward
+    x = self.bn_x(x.unsqueeze(2).unsqueeze(3)).squeeze(3).squeeze(2)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/batchnorm.py", line 76, in forward
+    exponential_average_factor, self.eps)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/functional.py", line 1623, in batch_norm
+    training, momentum, eps, torch.backends.cudnn.enabled
+RuntimeError: cuDNN error: CUDNN_STATUS_EXECUTION_FAILED

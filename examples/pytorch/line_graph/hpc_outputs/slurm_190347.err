@@ -1,0 +1,5 @@
++ python train_lgnn_fflow.py --n-nodes 400 --n-graphs 1 --gpu 0 --verbose
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 83, in <module>
+    model = lgnn.GNN(feats, args.radius, K, dev).to(dev)
+NameError: name 'lgnn' is not defined

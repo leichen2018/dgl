@@ -1,0 +1,8 @@
++ python train_exp_lgnn_origin_ws.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --n-features 8 --verbose --save-path lgnn
+Traceback (most recent call last):
+  File "train_exp_lgnn_origin_ws.py", line 24, in <module>
+    import exp_lgnn_origin_ws
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_origin_ws.py", line 63
+    y = self.gamma_i(y) + self.gamma_deg(deg_lg * y) self.gamma_a(th.mm(lg_a1, y)) + self.gamma_a2(th.mm(lg_a1, th.mm(lg_a1, y))) + self.gamma_x(pm_x)
+                                                        ^
+SyntaxError: invalid syntax

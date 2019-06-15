@@ -1,0 +1,1 @@
++ python train_exp_lgnn_origin_ws.py --n-nodes 400 --n-graphs 60000 --gpu 0 --interval 100 --n-features 40 --verbose --save-path lgnn

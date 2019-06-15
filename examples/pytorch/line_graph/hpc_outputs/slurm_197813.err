@@ -1,0 +1,1 @@
++ python train_lgnn_nbt.py --n-nodes 400 --n-graphs 6000 --radius 1 --gpu 0 --interval 100 --verbose --save-path lgnn_nbt

@@ -9,7 +9,6 @@
 #SBATCH --mail-user=leic.monitor@gmail.com
 #SBATCH --output=hpc_outputs/slurm_%j.out
 #SBATCH --error=hpc_outputs/slurm_%j.err 
-#SBATCH --partition=v100_sxm2_4,v100_pci_2,p40_4
 #SBATCH --gres=gpu:1
 
 cd /home/lc3909/dgl/examples/pytorch/line_graph

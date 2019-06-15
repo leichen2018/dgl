@@ -1,0 +1,17 @@
++ python train_exp_lgnn_flow_2.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path flow_lgnn_r2
+Traceback (most recent call last):
+  File "train_exp_lgnn_flow_2.py", line 187, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, Du_DD1_A, A_DD1, adj_diag_lg_deg_inverse, deg_g, deg_lg, pm, pd)
+  File "train_exp_lgnn_flow_2.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_flow_2.py", line 109, in step
+    z = model(g_a_d, g_d_a_d, lg_a1, pm, pd, deg_g, deg_lg)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_flow_2.py", line 104, in forward
+    x, y = module(x, y, g_a_d, g_d_a_d, lg_a_d, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_flow_2.py", line 60, in forward
+    y_r = self.gamma_y_r(y) + self.gamma_ad_r(th.mm(lg_a_d, y)) + self.gamma_ad_r_2(th.mm(lg_a_d, th.mm(lg_a_d, x))) + self.gamma_x_r(pm_x)
+RuntimeError: size mismatch, m1: [5798 x 5798], m2: [400 x 8] at /pytorch/aten/src/THC/generic/THCTensorMathBlas.cu:266

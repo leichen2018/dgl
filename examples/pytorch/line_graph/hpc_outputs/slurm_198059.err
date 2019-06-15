@@ -1,0 +1,5 @@
++ python train_exp_lgnn_iter.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_iter
+Traceback (most recent call last):
+  File "train_exp_lgnn_iter.py", line 81, in <module>
+    model = lgnn.GNN(feats, args.radius, K, dev).to(dev)
+NameError: name 'lgnn' is not defined

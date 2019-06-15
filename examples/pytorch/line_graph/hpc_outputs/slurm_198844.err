@@ -1,0 +1,19 @@
++ python train_exp_lgnn_iter_r2.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_iter_r2
+Traceback (most recent call last):
+  File "train_exp_lgnn_iter_r2.py", line 172, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "train_exp_lgnn_iter_r2.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_iter_r2.py", line 109, in step
+    z = model(deg_g, deg_lg, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_iter_r2.py", line 151, in forward
+    x0, x1, y = module(x0, x1, y, deg_g, g_a1, lg_a1, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_iter_r2.py", line 58, in forward
+    y_r = self.gamma_a_r(th.mm(lg_a1, y)) + self.gamma_a2_r(th.mm(lg_a1, th.mm(lg_a1, y))) + self.gamma_x_r(pm_x)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 535, in __getattr__
+    type(self).__name__, name))
+AttributeError: 'GNNModule' object has no attribute 'gamma_a2_r'

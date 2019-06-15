@@ -1,0 +1,23 @@
++ python train_exp_gnn_r1.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path gnn_r1
+Traceback (most recent call last):
+  File "train_exp_gnn_r1.py", line 163, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, g_a1)
+  File "train_exp_gnn_r1.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_gnn_r1.py", line 106, in step
+    z = model(deg_g, g_a1)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_gnn_r1.py", line 88, in forward
+    x = module(x, deg_g, g_a1)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_gnn_r1.py", line 49, in forward
+    x = self.bn_x(x.unsqueeze(2).unsqueeze(3)).squeeze(3).squeeze(2)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/batchnorm.py", line 76, in forward
+    exponential_average_factor, self.eps)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/functional.py", line 1623, in batch_norm
+    training, momentum, eps, torch.backends.cudnn.enabled
+RuntimeError: running_mean should contain 0 elements not 1

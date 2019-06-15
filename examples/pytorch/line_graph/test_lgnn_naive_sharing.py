@@ -101,7 +101,6 @@ def test():
             g_a1_a1 = th.sparse.mm(g_adj, g_adj.to_dense())
             g_a2 = th.where(g_a1_a1>0, th.ones(g_a1_a1.size()).to('cuda:0'), g_a1_a1)
 
-            lg_adj = lg_adj.t()
             lg_a1 = lg_adj.to_dense()
             lg_a1_a1 = th.sparse.mm(lg_adj, lg_a1)
             lg_a2 = th.where(lg_a1_a1>0, th.ones(lg_a1_a1.size()).to('cuda:0'), lg_a1_a1)

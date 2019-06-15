@@ -1,0 +1,5 @@
++ python train_lgnn_fflow.py --n-nodes 400 --n-graphs 1 --gpu 0 --verbose
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 171, in <module>
+    adj_diag_deg_inverse = th.mm(g_a1, diag_deg_inverse)
+RuntimeError: Dimension out of range (expected to be in range of [-1, 0], but got 1)

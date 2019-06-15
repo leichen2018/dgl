@@ -1,0 +1,2 @@
++ python train_exp_lgnn_sim.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_sim
+slurmstepd: error: *** JOB 209706 ON rose8 CANCELLED AT 2019-05-01T10:15:00 ***

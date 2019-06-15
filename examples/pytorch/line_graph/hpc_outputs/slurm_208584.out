@@ -1,0 +1,357 @@
+4
+2019-04-29 15:19:08.321994 [epoch 0 iteration 0000]loss 1.797 | overlap 0.056
+4
+2019-04-29 15:19:09.969360 [epoch 0 iteration 0001]loss 1.718 | overlap 0.097
+4
+2019-04-29 15:19:11.565690 [epoch 0 iteration 0002]loss 1.650 | overlap 0.116
+4
+2019-04-29 15:19:13.137323 [epoch 0 iteration 0003]loss 1.781 | overlap 0.091
+4
+2019-04-29 15:19:14.736342 [epoch 0 iteration 0004]loss 1.669 | overlap 0.106
+4
+2019-04-29 15:19:16.350753 [epoch 0 iteration 0005]loss 1.716 | overlap 0.106
+4
+2019-04-29 15:19:17.960989 [epoch 0 iteration 0006]loss 1.581 | overlap 0.144
+4
+2019-04-29 15:19:19.590103 [epoch 0 iteration 0007]loss 1.599 | overlap 0.122
+4
+2019-04-29 15:19:21.179650 [epoch 0 iteration 0008]loss 1.712 | overlap 0.081
+4
+2019-04-29 15:19:22.751139 [epoch 0 iteration 0009]loss 1.580 | overlap 0.147
+4
+2019-04-29 15:19:24.328311 [epoch 0 iteration 0010]loss 1.634 | overlap 0.097
+4
+2019-04-29 15:19:25.931274 [epoch 0 iteration 0011]loss 1.620 | overlap 0.100
+4
+2019-04-29 15:19:27.523853 [epoch 0 iteration 0012]loss 1.634 | overlap 0.134
+4
+2019-04-29 15:19:29.113362 [epoch 0 iteration 0013]loss 1.616 | overlap 0.100
+4
+2019-04-29 15:19:30.718055 [epoch 0 iteration 0014]loss 1.610 | overlap 0.088
+4
+2019-04-29 15:19:32.359088 [epoch 0 iteration 0015]loss 1.551 | overlap 0.141
+4
+2019-04-29 15:19:33.938726 [epoch 0 iteration 0016]loss 1.576 | overlap 0.128
+4
+2019-04-29 15:19:35.522159 [epoch 0 iteration 0017]loss 1.573 | overlap 0.125
+4
+2019-04-29 15:19:37.115407 [epoch 0 iteration 0018]loss 1.510 | overlap 0.166
+4
+2019-04-29 15:19:38.694171 [epoch 0 iteration 0019]loss 1.611 | overlap 0.109
+4
+2019-04-29 15:19:40.280574 [epoch 0 iteration 0020]loss 1.568 | overlap 0.119
+4
+2019-04-29 15:19:41.868589 [epoch 0 iteration 0021]loss 1.582 | overlap 0.150
+4
+2019-04-29 15:19:43.477794 [epoch 0 iteration 0022]loss 1.568 | overlap 0.112
+4
+2019-04-29 15:19:45.112187 [epoch 0 iteration 0023]loss 1.615 | overlap 0.106
+4
+2019-04-29 15:19:46.709190 [epoch 0 iteration 0024]loss 1.594 | overlap 0.088
+4
+2019-04-29 15:19:48.290109 [epoch 0 iteration 0025]loss 1.538 | overlap 0.112
+4
+2019-04-29 15:19:49.893240 [epoch 0 iteration 0026]loss 1.602 | overlap 0.084
+4
+2019-04-29 15:19:51.484396 [epoch 0 iteration 0027]loss 1.586 | overlap 0.091
+4
+2019-04-29 15:19:53.066443 [epoch 0 iteration 0028]loss 1.515 | overlap 0.166
+4
+2019-04-29 15:19:54.651396 [epoch 0 iteration 0029]loss 1.596 | overlap 0.094
+4
+2019-04-29 15:19:56.246644 [epoch 0 iteration 0030]loss 1.537 | overlap 0.137
+4
+2019-04-29 15:19:57.847243 [epoch 0 iteration 0031]loss 1.539 | overlap 0.112
+4
+2019-04-29 15:19:59.443477 [epoch 0 iteration 0032]loss 1.539 | overlap 0.122
+4
+2019-04-29 15:20:01.039407 [epoch 0 iteration 0033]loss 1.559 | overlap 0.116
+4
+2019-04-29 15:20:02.611415 [epoch 0 iteration 0034]loss 1.513 | overlap 0.156
+4
+2019-04-29 15:20:04.191196 [epoch 0 iteration 0035]loss 1.570 | overlap 0.141
+4
+2019-04-29 15:20:05.775889 [epoch 0 iteration 0036]loss 1.492 | overlap 0.169
+4
+2019-04-29 15:20:07.363832 [epoch 0 iteration 0037]loss 1.539 | overlap 0.131
+4
+2019-04-29 15:20:08.993147 [epoch 0 iteration 0038]loss 1.510 | overlap 0.169
+4
+2019-04-29 15:20:10.587044 [epoch 0 iteration 0039]loss 1.451 | overlap 0.184
+4
+2019-04-29 15:20:12.178821 [epoch 0 iteration 0040]loss 1.507 | overlap 0.116
+4
+2019-04-29 15:20:13.756475 [epoch 0 iteration 0041]loss 1.500 | overlap 0.147
+4
+2019-04-29 15:20:15.363435 [epoch 0 iteration 0042]loss 1.548 | overlap 0.163
+4
+2019-04-29 15:20:16.952817 [epoch 0 iteration 0043]loss 1.620 | overlap 0.091
+4
+2019-04-29 15:20:18.620803 [epoch 0 iteration 0044]loss 1.465 | overlap 0.191
+4
+2019-04-29 15:20:20.205452 [epoch 0 iteration 0045]loss 1.522 | overlap 0.141
+4
+2019-04-29 15:20:21.788228 [epoch 0 iteration 0046]loss 1.498 | overlap 0.197
+4
+2019-04-29 15:20:23.360791 [epoch 0 iteration 0047]loss 1.537 | overlap 0.106
+4
+2019-04-29 15:20:24.949207 [epoch 0 iteration 0048]loss 1.567 | overlap 0.109
+4
+2019-04-29 15:20:26.516904 [epoch 0 iteration 0049]loss 1.621 | overlap 0.091
+4
+2019-04-29 15:20:28.077666 [epoch 0 iteration 0050]loss 1.473 | overlap 0.150
+4
+2019-04-29 15:20:29.684030 [epoch 0 iteration 0051]loss 1.472 | overlap 0.209
+4
+2019-04-29 15:20:31.262462 [epoch 0 iteration 0052]loss 1.565 | overlap 0.116
+4
+2019-04-29 15:20:32.865451 [epoch 0 iteration 0053]loss 1.487 | overlap 0.181
+4
+2019-04-29 15:20:34.470457 [epoch 0 iteration 0054]loss 1.446 | overlap 0.203
+4
+2019-04-29 15:20:36.033443 [epoch 0 iteration 0055]loss 1.564 | overlap 0.150
+4
+2019-04-29 15:20:37.641992 [epoch 0 iteration 0056]loss 1.593 | overlap 0.094
+4
+2019-04-29 15:20:39.242179 [epoch 0 iteration 0057]loss 1.571 | overlap 0.128
+4
+2019-04-29 15:20:40.799429 [epoch 0 iteration 0058]loss 1.555 | overlap 0.131
+4
+2019-04-29 15:20:42.382062 [epoch 0 iteration 0059]loss 1.549 | overlap 0.147
+4
+2019-04-29 15:20:44.013954 [epoch 0 iteration 0060]loss 1.560 | overlap 0.128
+4
+2019-04-29 15:20:45.603766 [epoch 0 iteration 0061]loss 1.560 | overlap 0.131
+4
+2019-04-29 15:20:47.192570 [epoch 0 iteration 0062]loss 1.538 | overlap 0.134
+4
+2019-04-29 15:20:48.795473 [epoch 0 iteration 0063]loss 1.485 | overlap 0.219
+4
+2019-04-29 15:20:50.391821 [epoch 0 iteration 0064]loss 1.531 | overlap 0.131
+4
+2019-04-29 15:20:51.967838 [epoch 0 iteration 0065]loss 1.559 | overlap 0.106
+4
+2019-04-29 15:20:53.567904 [epoch 0 iteration 0066]loss 1.440 | overlap 0.194
+4
+2019-04-29 15:20:55.129138 [epoch 0 iteration 0067]loss 1.596 | overlap 0.059
+4
+2019-04-29 15:20:56.739124 [epoch 0 iteration 0068]loss 1.542 | overlap 0.125
+4
+2019-04-29 15:20:58.338600 [epoch 0 iteration 0069]loss 1.513 | overlap 0.153
+4
+2019-04-29 15:20:59.951380 [epoch 0 iteration 0070]loss 1.526 | overlap 0.172
+4
+2019-04-29 15:21:01.539652 [epoch 0 iteration 0071]loss 1.528 | overlap 0.163
+4
+2019-04-29 15:21:03.162414 [epoch 0 iteration 0072]loss 1.586 | overlap 0.112
+4
+2019-04-29 15:21:04.773697 [epoch 0 iteration 0073]loss 1.546 | overlap 0.153
+4
+2019-04-29 15:21:06.366773 [epoch 0 iteration 0074]loss 1.532 | overlap 0.131
+4
+2019-04-29 15:21:07.950690 [epoch 0 iteration 0075]loss 1.500 | overlap 0.153
+4
+2019-04-29 15:21:09.561187 [epoch 0 iteration 0076]loss 1.512 | overlap 0.159
+4
+2019-04-29 15:21:11.141757 [epoch 0 iteration 0077]loss 1.484 | overlap 0.159
+4
+2019-04-29 15:21:12.726661 [epoch 0 iteration 0078]loss 1.657 | overlap 0.059
+4
+2019-04-29 15:21:14.335624 [epoch 0 iteration 0079]loss 1.496 | overlap 0.172
+4
+2019-04-29 15:21:15.935141 [epoch 0 iteration 0080]loss 1.648 | overlap 0.075
+4
+2019-04-29 15:21:17.512743 [epoch 0 iteration 0081]loss 1.556 | overlap 0.112
+4
+2019-04-29 15:21:19.106734 [epoch 0 iteration 0082]loss 1.531 | overlap 0.131
+4
+2019-04-29 15:21:20.746975 [epoch 0 iteration 0083]loss 1.572 | overlap 0.116
+4
+2019-04-29 15:21:22.337544 [epoch 0 iteration 0084]loss 1.455 | overlap 0.250
+4
+2019-04-29 15:21:23.933687 [epoch 0 iteration 0085]loss 1.467 | overlap 0.200
+4
+2019-04-29 15:21:25.520761 [epoch 0 iteration 0086]loss 1.481 | overlap 0.181
+4
+2019-04-29 15:21:27.099979 [epoch 0 iteration 0087]loss 1.589 | overlap 0.100
+4
+2019-04-29 15:21:28.693445 [epoch 0 iteration 0088]loss 1.525 | overlap 0.156
+4
+2019-04-29 15:21:30.313170 [epoch 0 iteration 0089]loss 1.608 | overlap 0.084
+4
+2019-04-29 15:21:31.907747 [epoch 0 iteration 0090]loss 1.612 | overlap 0.078
+4
+2019-04-29 15:21:33.501815 [epoch 0 iteration 0091]loss 1.569 | overlap 0.084
+4
+2019-04-29 15:21:35.076306 [epoch 0 iteration 0092]loss 1.514 | overlap 0.131
+4
+2019-04-29 15:21:36.651132 [epoch 0 iteration 0093]loss 1.542 | overlap 0.128
+4
+2019-04-29 15:21:38.243754 [epoch 0 iteration 0094]loss 1.546 | overlap 0.128
+4
+2019-04-29 15:21:39.833510 [epoch 0 iteration 0095]loss 1.472 | overlap 0.200
+4
+2019-04-29 15:21:41.420431 [epoch 0 iteration 0096]loss 1.536 | overlap 0.141
+4
+2019-04-29 15:21:42.991747 [epoch 0 iteration 0097]loss 1.567 | overlap 0.103
+4
+2019-04-29 15:21:44.548428 [epoch 0 iteration 0098]loss 1.512 | overlap 0.144
+4
+2019-04-29 15:21:46.135243 [epoch 0 iteration 0099]loss 1.513 | overlap 0.159
+=================== interval 99 | loss 1.559 | overlap 0.132 ===================
+4
+2019-04-29 15:21:47.739038 [epoch 0 iteration 0100]loss 1.607 | overlap 0.097
+4
+2019-04-29 15:21:49.347609 [epoch 0 iteration 0101]loss 1.512 | overlap 0.181
+4
+2019-04-29 15:21:50.951108 [epoch 0 iteration 0102]loss 1.522 | overlap 0.141
+4
+2019-04-29 15:21:52.540674 [epoch 0 iteration 0103]loss 1.477 | overlap 0.203
+4
+2019-04-29 15:21:54.118804 [epoch 0 iteration 0104]loss 1.510 | overlap 0.153
+4
+2019-04-29 15:21:55.703578 [epoch 0 iteration 0105]loss 1.551 | overlap 0.128
+4
+2019-04-29 15:21:57.308800 [epoch 0 iteration 0106]loss 1.588 | overlap 0.131
+4
+2019-04-29 15:21:58.926486 [epoch 0 iteration 0107]loss 1.547 | overlap 0.153
+4
+2019-04-29 15:22:00.520309 [epoch 0 iteration 0108]loss 1.483 | overlap 0.150
+4
+2019-04-29 15:22:02.118959 [epoch 0 iteration 0109]loss 1.418 | overlap 0.237
+4
+2019-04-29 15:22:03.714383 [epoch 0 iteration 0110]loss 1.472 | overlap 0.197
+4
+2019-04-29 15:22:05.300336 [epoch 0 iteration 0111]loss 1.512 | overlap 0.163
+4
+2019-04-29 15:22:06.917862 [epoch 0 iteration 0112]loss 1.550 | overlap 0.122
+4
+2019-04-29 15:22:08.527658 [epoch 0 iteration 0113]loss 1.530 | overlap 0.141
+4
+2019-04-29 15:22:10.162908 [epoch 0 iteration 0114]loss 1.480 | overlap 0.212
+4
+2019-04-29 15:22:11.740670 [epoch 0 iteration 0115]loss 1.526 | overlap 0.125
+4
+2019-04-29 15:22:13.316540 [epoch 0 iteration 0116]loss 1.492 | overlap 0.194
+4
+2019-04-29 15:22:14.905487 [epoch 0 iteration 0117]loss 1.615 | overlap 0.081
+4
+2019-04-29 15:22:16.487045 [epoch 0 iteration 0118]loss 1.444 | overlap 0.244
+4
+2019-04-29 15:22:18.091884 [epoch 0 iteration 0119]loss 1.486 | overlap 0.163
+4
+2019-04-29 15:22:19.673512 [epoch 0 iteration 0120]loss 1.428 | overlap 0.262
+4
+2019-04-29 15:22:21.248828 [epoch 0 iteration 0121]loss 1.506 | overlap 0.125
+4
+2019-04-29 15:22:22.830931 [epoch 0 iteration 0122]loss 1.596 | overlap 0.081
+4
+2019-04-29 15:22:24.422800 [epoch 0 iteration 0123]loss 1.477 | overlap 0.216
+4
+2019-04-29 15:22:26.037961 [epoch 0 iteration 0124]loss 1.417 | overlap 0.222
+4
+2019-04-29 15:22:27.598035 [epoch 0 iteration 0125]loss 1.553 | overlap 0.125
+4
+2019-04-29 15:22:29.190761 [epoch 0 iteration 0126]loss 1.561 | overlap 0.097
+4
+2019-04-29 15:22:30.766107 [epoch 0 iteration 0127]loss 1.501 | overlap 0.156
+4
+2019-04-29 15:22:32.352960 [epoch 0 iteration 0128]loss 1.528 | overlap 0.166
+4
+2019-04-29 15:22:33.985010 [epoch 0 iteration 0129]loss 1.502 | overlap 0.141
+4
+2019-04-29 15:22:35.587273 [epoch 0 iteration 0130]loss 1.477 | overlap 0.231
+4
+2019-04-29 15:22:37.169574 [epoch 0 iteration 0131]loss 1.461 | overlap 0.197
+4
+2019-04-29 15:22:38.748504 [epoch 0 iteration 0132]loss 1.574 | overlap 0.097
+4
+2019-04-29 15:22:40.352902 [epoch 0 iteration 0133]loss 1.517 | overlap 0.141
+4
+2019-04-29 15:22:41.997625 [epoch 0 iteration 0134]loss 1.540 | overlap 0.131
+4
+2019-04-29 15:22:43.597283 [epoch 0 iteration 0135]loss 1.473 | overlap 0.191
+4
+2019-04-29 15:22:45.216225 [epoch 0 iteration 0136]loss 1.444 | overlap 0.209
+4
+2019-04-29 15:22:46.821806 [epoch 0 iteration 0137]loss 1.463 | overlap 0.187
+4
+2019-04-29 15:22:48.423833 [epoch 0 iteration 0138]loss 1.495 | overlap 0.184
+4
+2019-04-29 15:22:50.027970 [epoch 0 iteration 0139]loss 1.560 | overlap 0.125
+4
+2019-04-29 15:22:51.627884 [epoch 0 iteration 0140]loss 1.455 | overlap 0.194
+4
+2019-04-29 15:22:53.199820 [epoch 0 iteration 0141]loss 1.542 | overlap 0.178
+4
+2019-04-29 15:22:54.796226 [epoch 0 iteration 0142]loss 1.510 | overlap 0.184
+4
+2019-04-29 15:22:56.396189 [epoch 0 iteration 0143]loss 1.441 | overlap 0.216
+4
+2019-04-29 15:22:57.981017 [epoch 0 iteration 0144]loss 1.359 | overlap 0.297
+4
+2019-04-29 15:22:59.558182 [epoch 0 iteration 0145]loss 1.469 | overlap 0.203
+4
+2019-04-29 15:23:01.158047 [epoch 0 iteration 0146]loss 1.464 | overlap 0.206
+4
+2019-04-29 15:23:02.734200 [epoch 0 iteration 0147]loss 1.599 | overlap 0.081
+4
+2019-04-29 15:23:04.355590 [epoch 0 iteration 0148]loss 1.637 | overlap 0.050
+4
+2019-04-29 15:23:05.968350 [epoch 0 iteration 0149]loss 1.519 | overlap 0.141
+4
+2019-04-29 15:23:07.548906 [epoch 0 iteration 0150]loss 1.478 | overlap 0.197
+4
+2019-04-29 15:23:09.141331 [epoch 0 iteration 0151]loss 1.463 | overlap 0.178
+4
+2019-04-29 15:23:10.730752 [epoch 0 iteration 0152]loss 1.368 | overlap 0.303
+4
+2019-04-29 15:23:12.318801 [epoch 0 iteration 0153]loss 1.541 | overlap 0.106
+4
+2019-04-29 15:23:13.933868 [epoch 0 iteration 0154]loss 1.548 | overlap 0.144
+4
+2019-04-29 15:23:15.556432 [epoch 0 iteration 0155]loss 1.428 | overlap 0.219
+4
+2019-04-29 15:23:17.125774 [epoch 0 iteration 0156]loss 1.463 | overlap 0.209
+4
+2019-04-29 15:23:18.698006 [epoch 0 iteration 0157]loss 1.597 | overlap 0.106
+4
+2019-04-29 15:23:20.289931 [epoch 0 iteration 0158]loss 1.592 | overlap 0.100
+4
+2019-04-29 15:23:21.881291 [epoch 0 iteration 0159]loss 1.520 | overlap 0.175
+4
+2019-04-29 15:23:23.490184 [epoch 0 iteration 0160]loss 1.509 | overlap 0.181
+4
+2019-04-29 15:23:25.088321 [epoch 0 iteration 0161]loss 1.482 | overlap 0.169
+4
+2019-04-29 15:23:26.665937 [epoch 0 iteration 0162]loss 1.464 | overlap 0.181
+4
+2019-04-29 15:23:28.252316 [epoch 0 iteration 0163]loss 1.568 | overlap 0.134
+4
+2019-04-29 15:23:29.879293 [epoch 0 iteration 0164]loss 1.515 | overlap 0.134
+4
+2019-04-29 15:23:31.445972 [epoch 0 iteration 0165]loss 1.475 | overlap 0.187
+4
+2019-04-29 15:23:33.072872 [epoch 0 iteration 0166]loss 1.571 | overlap 0.100
+4
+2019-04-29 15:23:34.670285 [epoch 0 iteration 0167]loss 1.477 | overlap 0.159
+4
+2019-04-29 15:23:36.278561 [epoch 0 iteration 0168]loss 1.529 | overlap 0.131
+4
+2019-04-29 15:23:37.899054 [epoch 0 iteration 0169]loss 1.515 | overlap 0.144
+4
+2019-04-29 15:23:39.473170 [epoch 0 iteration 0170]loss 1.531 | overlap 0.131
+4
+2019-04-29 15:23:41.064251 [epoch 0 iteration 0171]loss 1.510 | overlap 0.153
+4
+2019-04-29 15:23:42.641889 [epoch 0 iteration 0172]loss 1.571 | overlap 0.097
+4
+2019-04-29 15:23:44.215110 [epoch 0 iteration 0173]loss 1.505 | overlap 0.153
+4
+2019-04-29 15:23:45.778690 [epoch 0 iteration 0174]loss 1.536 | overlap 0.175
+4
+2019-04-29 15:23:47.404883 [epoch 0 iteration 0175]loss 1.470 | overlap 0.187
+4
+2019-04-29 15:23:49.036025 [epoch 0 iteration 0176]loss 1.439 | overlap 0.212
+4
+2019-04-29 15:23:50.622729 [epoch 0 iteration 0177]loss 1.506 | overlap 0.163

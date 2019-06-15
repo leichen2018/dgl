@@ -52,8 +52,8 @@ class SBM:
                 Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()
         out_degrees = lambda g: g.out_degrees(
                 Index(np.arange(0, g.number_of_nodes()))).unsqueeze(1).float()
-        self._g_degs = [in_degrees(g) for g in self._gs]
-        self._lg_degs = [out_degrees(lg) for lg in self._lgs]
+        self._g_degs = [in_degrees(g).to('cuda:0') for g in self._gs]
+        self._lg_degs = [in_degrees(lg).to('cuda:0') for lg in self._lgs]
 
         self._g_adj = [g.adjacency_matrix().to('cuda:0') for g in self._gs]
         self._lg_adj = [lg.adjacency_matrix().to('cuda:0') for lg in self._lgs]

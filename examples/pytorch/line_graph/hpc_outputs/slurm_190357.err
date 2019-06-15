@@ -1,0 +1,5 @@
++ python train_lgnn_fflow.py --n-nodes 10 --n-graphs 1 --gpu 0 --verbose --q 6
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 190, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, deg_g, deg_lg, g_a1, g_a2, lg_a1, lg_a2, pm, pd)
+NameError: name 'g_a2' is not defined

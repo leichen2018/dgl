@@ -1,0 +1,2 @@
++ python train_exp_gnn_iter.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path gnn_iter
+slurmstepd: error: *** JOB 200479 ON lion10 CANCELLED AT 2019-04-23T20:30:36 ***

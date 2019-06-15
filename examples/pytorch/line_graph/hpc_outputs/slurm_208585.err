@@ -1,0 +1,2 @@
++ python train_exp_lgnn_iter.py --n-nodes 400 --n-graphs 6000 --gpu 0 --n-layers 5 --interval 100 --verbose --save-path lgnn_iter
+slurmstepd: error: *** JOB 208585 ON vine3 CANCELLED AT 2019-04-29T15:24:15 ***

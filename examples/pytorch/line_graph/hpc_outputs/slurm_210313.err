@@ -1,0 +1,7 @@
++ python train_exp_lgnn_sim.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_sim
+Traceback (most recent call last):
+  File "train_exp_lgnn_sim.py", line 81, in <module>
+    model = exp_lgnn_sim.GNN(feats, args.radius, K, dev).to(dev)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 118, in __init__
+    self.module_final = GNNModule_final(feats[-2], feats[-1], radius, dev)
+NameError: name 'GNNModule_final' is not defined

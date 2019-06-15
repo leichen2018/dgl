@@ -1,0 +1,2 @@
++ python train_lgnn_cat.py --n-nodes 400 --n-graphs 30000 --gpu 0 --interval 100 --verbose --save-path lgnn_cat_1
+slurmstepd: error: *** JOB 185583 ON lion20 CANCELLED AT 2019-04-03T14:40:21 ***

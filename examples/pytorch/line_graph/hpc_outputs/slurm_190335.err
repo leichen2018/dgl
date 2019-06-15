@@ -1,0 +1,3 @@
++ model_name=lgnn_100_J2_q18_15000
++ python train_lgnn.py --n-nodes 100 --n-graphs 15000 --gpu 0 --interval 100 --verbose --save-path lgnn_100_J2_q18_15000
+slurmstepd: error: *** JOB 190335 ON lion20 CANCELLED AT 2019-04-07T21:10:33 ***

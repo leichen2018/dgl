@@ -63,7 +63,7 @@ class GNNModule(nn.Module):
         x_list = []
 
         x_list.append(th.mm(g_a1, x))
-        x_list.append(th.mm(g_a2, x))
+        #x_list.append(th.mm(g_a2, x))
 
         sum_x = sum(theta(z) for theta, z in zip(self.theta_list, x_list))
         sum_x_r = sum(theta(z) for theta, z in zip(self.theta_list_r, x_list))
@@ -77,7 +77,7 @@ class GNNModule(nn.Module):
         y_list = []
         
         y_list.append(th.mm(lg_a1, y))
-        y_list.append(th.mm(lg_a2, y))
+        #y_list.append(th.mm(lg_a2, y))
         
         sum_y = sum(gamma(z) for gamma, z in zip(self.gamma_list, y_list))
         sum_y_r = sum(gamma(z) for gamma, z in zip(self.gamma_list_r, y_list))
@@ -115,7 +115,7 @@ class GNNModule_final(nn.Module):
         x_list = []
 
         x_list.append(th.mm(g_a1, x))
-        x_list.append(th.mm(g_a2, x))
+        #x_list.append(th.mm(g_a2, x))
 
         sum_x = sum(theta(z) for theta, z in zip(self.theta_list, x_list))
 

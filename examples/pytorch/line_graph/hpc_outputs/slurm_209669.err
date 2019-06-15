@@ -1,0 +1,15 @@
++ python train_exp_lgnn_sim.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_sim
+Traceback (most recent call last):
+  File "train_exp_lgnn_sim.py", line 81, in <module>
+    model = exp_lgnn_sim.GNN(feats, args.radius, K, dev).to(dev)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 132, in __init__
+    for m, n in zip(feats[:-2], feats[1:-1])])
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 132, in <listcomp>
+    for m, n in zip(feats[:-2], feats[1:-1])])
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 43, in __init__
+    self.mlp = MLP(in_feats, out_feats, 2)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_sim.py", line 58, in __init__
+    self.modules_linear = nn.ModuleList([nn.Linear(m, n) for m, n in zip(feats[:-1], feats[1:])])
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 561, in __setattr__
+    "cannot assign module before Module.__init__() call")
+AttributeError: cannot assign module before Module.__init__() call

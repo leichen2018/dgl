@@ -1,0 +1,5 @@
++ python train_lgnn_fflow.py --n-nodes 400 --n-graphs 1 --gpu 0 --verbose
+Traceback (most recent call last):
+  File "train_lgnn_fflow.py", line 168, in <module>
+    deg_inverse = th.where(deg_g>1, 1/(deg_g-1), th.zeros(deg_g.size()).to('cuda:0'))
+RuntimeError: Expected tensor to have CPU Backend, but got tensor with CUDA Backend (while checking arguments for CPU_tensor_apply)

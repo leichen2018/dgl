@@ -1,0 +1,22 @@
++ model_name=lgnn_600_J2_q18_15000
++ python train_lgnn.py --n-nodes 600 --n-graphs 15000 --gpu 0 --interval 100 --verbose --save-path lgnn_600_J2_q18_15000
++ for nodes in 100 200 400 600 800 1600
++ python test_lgnn.py --gpu 0 --n-nodes 100 --n-graphs 300 --model-path lgnn_600_J2_q18_15000
++ for nodes in 100 200 400 600 800 1600
++ python test_lgnn.py --gpu 0 --n-nodes 200 --n-graphs 300 --model-path lgnn_600_J2_q18_15000
++ for nodes in 100 200 400 600 800 1600
++ python test_lgnn.py --gpu 0 --n-nodes 400 --n-graphs 300 --model-path lgnn_600_J2_q18_15000
++ for nodes in 100 200 400 600 800 1600
++ python test_lgnn.py --gpu 0 --n-nodes 600 --n-graphs 300 --model-path lgnn_600_J2_q18_15000
++ for nodes in 100 200 400 600 800 1600
++ python test_lgnn.py --gpu 0 --n-nodes 800 --n-graphs 300 --model-path lgnn_600_J2_q18_15000
++ for nodes in 100 200 400 600 800 1600
++ python test_lgnn.py --gpu 0 --n-nodes 1600 --n-graphs 300 --model-path lgnn_600_J2_q18_15000
+Traceback (most recent call last):
+  File "test_lgnn.py", line 119, in <module>
+    overlap_list = test()
+  File "test_lgnn.py", line 106, in test
+    lg_a1_a1 = th.sparse.mm(lg_adj, lg_a1)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/sparse/__init__.py", line 67, in mm
+    return torch._sparse_mm(mat1, mat2)
+RuntimeError: CUDA out of memory. Tried to allocate 2.00 GiB (GPU 0; 10.92 GiB total capacity; 7.98 GiB already allocated; 401.50 MiB free; 1.97 GiB cached)

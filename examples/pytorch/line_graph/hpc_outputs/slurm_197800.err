@@ -1,0 +1,17 @@
++ python train_exp_lgnn_flow.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path flow_lgnn
+Traceback (most recent call last):
+  File "train_exp_lgnn_flow.py", line 185, in <module>
+    loss, overlap, t_forward, t_backward = step(i, j, Du_DD1_A, A_DD1, adj_diag_lg_deg_inverse, deg_g, deg_lg, pm, pd)
+  File "train_exp_lgnn_flow.py", line 97, in wrap
+    return f(*new)
+  File "train_exp_lgnn_flow.py", line 107, in step
+    z = model(g_a_d, g_d_a_d, lg_a1, pm, pd, deg_g, deg_lg)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_flow.py", line 104, in forward
+    x, y = module(x, y, g_a_d, g_d_a_d, lg_a_d, pm, pd)
+  File "/home/lc3909/miniconda3/lib/python3.7/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lc3909/dgl/examples/pytorch/line_graph/exp_lgnn_flow.py", line 51, in forward
+    pd_y = th.mm(pd, y)        
+RuntimeError: Expected object of backend CPU but got backend CUDA for argument #2 'mat2'

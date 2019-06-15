@@ -1,0 +1,2 @@
++ python train_exp_lgnn_flow_nbt_iter.py --n-nodes 400 --n-graphs 6000 --gpu 0 --interval 100 --verbose --save-path lgnn_flow_nbt_iter
+slurmstepd: error: *** JOB 204512 ON lion1 CANCELLED AT 2019-04-25T18:34:21 ***
